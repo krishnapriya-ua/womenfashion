@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/admin-nav.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+     
+    <title>Admin Page</title>
+    <style>
+   .dashboard-box {
+  
+    border-radius: 10px; /* Adds slight curves to the corners */
+    padding: 20px;
+    margin: 6px; /* Adds gap between the boxes */
+    background-color: white;
+    box-shadow: 0 6px 8px #816464; /* Adds a subtle shadow effect */
+    text-align: center; /* Centers the text */
+}
+ .para{
+    margin-left: -99px;
+    color: #817271;
+    font-weight: 600;
+
+}
+.parap{
+     margin-left: -129px;
+}
+.sales-graph-container {
+   
+    width: 84%;
+    margin-top: 33px; /* or a specific width depending on your layout */
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevents wrapping */
+}
+
+#salesGraph {
+    width: 100%; /* Adjust this to fit the number of months */
+    height: 160px; 
+
+}
+.button{
+    margin-left: 0px;
+}
+
+.table td ,th{
+    font-size: small;
+    color:#817271
+}
+
+
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light " id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="Logo" style="margin-left: 20px; width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ms-auto">
+                    <button id="logout" class="btn btn-link nav-item nav-link" style="font-weight: 500;font-size: small;margin-right: 43px;">LOGOUT</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar">
+        <a class="nav-item nav-link active" href="/admin/adminpage">DASHBOARD</a>
+        <a class="nav-item nav-link" href="/product/allproducts">PRODUCTS</a>
+        <a class="nav-item nav-link" href="/product/categories">CATEGORIES</a>
+        <a class="nav-item nav-link" href="/admin/users">USERS LIST</a>
+        <a class="nav-item nav-link" href="/product/orders">ORDER LIST</a>
+        <a class="nav-item nav-link" href="/product/coupon">DISCOUNTS & COUPENS</a>
+    </div>
+
+    <div class="content" style="margin-left: 150px;padding: 90px;background-color: #E7E7E3;">
+  <div class="row" style="display: flex;flex-direction:row ;">
+    <div class="col-md-6">
+   <h5 class="mt-5" style="color: #817271; font-weight: 700;margin-left: -42px;">DASHBOARD</h5>
+   </div>
+      <div class="col-md-6" style="margin-top: 53px;">
+     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16" style=" color: #817271;margin-left: 288px;font-weight: 500;">
+            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h9V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H1a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+        </svg>
+   <span id="current-date" style="font-size: small;  color: #817271;font-weight: 500;"></span>
+   </div>
+</div>
+<div class="row mt-4 p-2" style="display: flex; flex-direction: row;">
+    <div class="col-md-3 dashboard-box" style="margin-left: -42px;">
+        <p class="para">Total revenue</p>
+       <p style="color: #817271;font-weight: 600;"class="parap">Rs.{{totalRevenue}}</p>
+    </div>
+    <div class="col-md-3 dashboard-box" >
+        <p style="color: #817271;" class="para">Total orders</p>
+        <p style="color: #817271;font-weight: 600;"class="parap">{{totalOrders}}</p>
+    </div>
+    <div class="col-md-3 dashboard-box" >
+        <p style="color: #817271;"class="para">Visitors</p>
+         <p style="color: #817271;font-weight: 600;"class="parap">{{totalVisitors}}</p>
+    </div>
+     <div class="col-md-3 dashboard-box" style="margin: 6px;" >
+        <p style="color: #817271;"class="para">Return orders</p>
+         <p style="color: #817271;font-weight: 600;"class="parap">{{returnedOrders}}</p>
+    </div>
+</div> 
+
+<div class="mt-5">
+   
+</div>
+<div class="timeframe-buttons mt-5">
+     <h5 style="font-weight: 500;color:#817271;margin-top: 80px;margin-left: -42px;">SALES GRAPH</h5>
+    <button id="weeklyBtn" class="button" style="margin-left: -42px;">Weekly</button>
+    <button id="monthlyBtn" class="button">Monthly</button>
+    <button id="yearlyBtn" class="button">Yearly</button>
+</div>
+
+
+
+<div class="sales-graph-container">
+    <canvas id="salesGraph" style="width:300px;height:auto"></canvas>
+</div>
+
+
+
+<div class="row mt-5 p-2" style="display: flex; flex-direction: row;">
+    <div class="col-md-6 mt-5 dashboard-box" style="margin-left: -42px;">
+        <p class="text-center" style="color: #817271;">BEST SELLING PRODUCTS [TOP 10]</p>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Sold</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="bestseller-table">
+                {{#each bestsellingproduct}}
+                <tr>
+                    <td>
+                        <img src="/product-images/{{this.images.[0]}}" style="width: 35px; height: auto; margin-right: 10px;">
+                       
+                    </td>
+                    <td> {{this.name}}</td>
+                    <td>{{this.totalQuantity}}</td>
+                    <td>Rs. {{this.price}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+          
+       <a href="#" id="show-more" style="display: block; text-align: center; font-size: small;color:#817271">Show More</a>
+       <a href="#" id="show-less" style="display: none; text-align: center;font-size: small;color:#817271">Show Less</a>
+
+    </div>
+
+      <div class="col-md-4 mt-5 dashboard-box" style="margin-left: 55px;height: 300px;">
+        <p class="text-center" style="color: #817271;">BEST SELLING CATEGORIES</p>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Sold</th>
+                </tr>
+            </thead>
+            <tbody id="bestselling-category-table">
+                {{#each bestsellingcategory}}
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.totalQuantity}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+          </div>
+         
+
+</div>
+
+
+
+<form method="GET" action="/admin/adminpage/report" style="margin-top: 100px;">
+  <h5 style="font-weight: 500;color:#817271;margin-top: 100px;">SALES REPORT</h5>
+    <div class="form-group ">
+        <button type="button" class="button" id="todaybtn" >Today</button>
+        <button type="button" class="button" id="weeklybtn">This week</button>
+        <button type="button" class="button" id="monthlybtn">This month</button> 
+         <button type="button" class="button" id="yearlybtn">This year</button> <br><br>
+        <label for="period">Select Period:</label>
+        <select id="period" name="period" class="form-control" style="width: 50%;">
+            <option value="daily" {{#if (pq period 'daily')}}selected{{/if}}>Daily</option>
+            <option value="weekly" {{#if (pq period 'weekly')}}selected{{/if}}>Weekly</option>
+            <option value="monthly" {{#if (pq period 'monthly')}}selected{{/if}}>Monthly</option>
+            <option value="yearly" {{#if (pq period 'yearly')}}selected{{/if}}>Yearly</option>
+        </select>
+    </div> <br>
+    
+    <div class="form-group">
+        <label for="startDate">Start Date:</label> <br>
+        <input type="date" id="startDate" name="startDate" class="form-control" style="width:  50%;" value="{{startDate}}">
+    </div> <br>
+    
+    <div class="form-group">
+        <label for="endDate">End Date:</label><br>
+        <input type="date" id="endDate" name="endDate" class="form-control" style="width:  50%;" value="{{endDate}}">
+    </div>
+
+    <button type="submit" class="button" style="width: fit-content; margin-left: 0px;">Generate Report</button>
+</form>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#logout').click(function(event){
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/logoutadmin',
+                    success: function(response){
+                        iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                            position: 'topCenter',
+                            timeout: 3000,
+                            icon: 'icon-checkmark',
+                            color: 'green'
+                        });
+                        setTimeout(function() {
+                            window.location.href = '/admin';
+                        }, 1700); // Redirect after toast disappears
+                    },
+                    error: function(xhr, status, error){
+                        iziToast.error({
+                            title: 'Error',
+                            message: xhr.responseText,
+                            position: 'center',
+                            timeout: 3000
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
+        const options={day:'numeric',month:'long',year:'numeric'}
+        const currentdate=new Date().toLocaleDateString('en-IN',options)
+        document.getElementById('current-date').textContent=currentdate
+    })
+</script>
+  <script>
+ const ctx = document.getElementById('salesGraph').getContext('2d');
+
+const salesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], // Months
+        datasets: [{
+            label: 'Total Revenue',
+            data: {{{ json monthlySales }}},
+            borderColor: 'rgba(75, 192, 192, 1)',
+            fill: false,
+            tension: 0.1
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                ticks: {
+                    maxRotation: 0,
+                    autoSkip:false // Ensures all labels are shown
+                }
+            }
+        }
+    }
+});
+
+
+    // Event listeners for buttons
+    document.getElementById('weeklyBtn').addEventListener('click', function() {
+        updateChart('weekly');
+    });
+
+    document.getElementById('monthlyBtn').addEventListener('click', function() {
+        updateChart('monthly');
+    });
+
+    document.getElementById('yearlyBtn').addEventListener('click', function() {
+        updateChart('yearly');
+    });
+
+    // Function to update the chart data
+    function updateChart(timeframe) {
+        let newData, newLabels;
+        if (timeframe === 'weekly') {
+            newData = {{{json weeklySales}}};
+            newLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+        } else if (timeframe === 'monthly') {
+            newData = {{{json monthlySales}}};
+            newLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        } else if (timeframe === 'yearly') {
+            newData = {{{json yearlySales}}};
+            newLabels = [ '2020', '2021', '2022', '2023','2024','2025']; // Adjust as needed
+        }
+
+        salesChart.data.labels = newLabels;
+        salesChart.data.datasets[0].data = newData;
+        salesChart.update();
+    }
+</script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded',function(){
+        document.getElementById('todaybtn').addEventListener('click',function(){
+            window.location.href='/admin/adminpage/report?period=today'
+        })
+
+         document.getElementById('weeklybtn').addEventListener('click',function(){
+            window.location.href='/admin/adminpage/report?period=thisWeek'
+        })
+
+         document.getElementById('monthlybtn').addEventListener('click',function(){
+            window.location.href='/admin/adminpage/report?period=thisMonth'
+        })
+
+         document.getElementById('yearlybtn').addEventListener('click',function(){
+            window.location.href='/admin/adminpage/report?period=thisYear'
+        })
+    })
+
+</script>
+
+
+<script>
+    //showmore
+  
+let skip = 5;
+let showingMore = false;
+
+document.getElementById('show-more').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    if (!showingMore) {
+        fetch(`/admin/more-bestsellers?skip=${skip}`)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('bestseller-table');
+
+                data.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><img src="/product-images/${product.images[0]}" style="width: 50px; height: auto; margin-right: 10px;"></td>
+                        <td>${product.name}</td>
+                        <td>${product.totalQuantity}</td>
+                        <td>Rs. ${product.price}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                skip += data.length;
+
+                // Toggle buttons
+                document.getElementById('show-more').style.display = 'none';
+                document.getElementById('show-less').style.display = 'block';
+
+                showingMore = true;
+            })
+            .catch(err => console.error('Error fetching more bestsellers:', err));
+    }
+});
+
+
+    document.getElementById('show-less').addEventListener('click', function(event) {
+    event.preventDefault();
+
+    if (showingMore) {
+        const tableBody = document.getElementById('bestseller-table');
+        const rows = tableBody.querySelectorAll('tr');
+
+        // Remove the additional rows
+        for (let i = 5; i < rows.length; i++) {
+            tableBody.removeChild(rows[i]);
+        }
+
+        // Toggle buttons
+        document.getElementById('show-more').style.display = 'block';
+        document.getElementById('show-less').style.display = 'none';
+
+        skip = 5;
+        showingMore = false;
+    }
+    })
+</script>
+</body>
+</html>

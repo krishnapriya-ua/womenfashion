@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <link rel="stylesheet" href="/css/admin-nav.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+  
+    <title>Product page</title>
+    <style>
+      #nav{
+      
+        position: absolute;
+       
+      }
+      .sidebar{
+        margin-top: 0px;
+        padding-top: 100px;
+      }
+    </style>
+</head>
+<body>
+ 
+   <nav class="navbar navbar-expand-lg navbar-light " id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="Logo" style="margin-left: 20px; width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ms-auto">
+                    <button id="logout" class="btn btn-link nav-item nav-link" style="font-weight: 500;font-size: small;margin-right: 43px;">LOGOUT</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar">
+        <a class="nav-item nav-link active" href="/admin/adminpage">DASHBOARD</a>
+        <a class="nav-item nav-link" href="/product/allproducts">PRODUCTS</a>
+        <a class="nav-item nav-link" href="/product/categories">CATEGORIES</a>
+        <a class="nav-item nav-link" href="/admin/users">USERS LIST</a>
+        <a class="nav-item nav-link" href="/product/orders">ORDER LIST</a>
+          <a class="nav-item nav-link" href="/product/coupon">DISCOUNTS & COUPENS</a>
+    </div>
+
+    <div class="content  " style="margin-left: 177px; padding:66px">
+        <h5 class="text-center mt-5" style="font-weight: 500;font-size:medium;">CATEGORIES</h5>
+
+         <h5 class=" mt-5" style="font-weight: 500;font-size:medium; ">Add a  New Category</h5>
+                <form action="/product/categories/add" method="POST">
+                    <div class="mb-3 mt-4">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" name="name"style="width: 80%;" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="categoryDescription" name="description" style="width: 80%;" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="button" style="margin-left: 0px;">Add Category</button>
+                </form>
+        <h5 class="text-center mt-5" style="font-weight: 500;font-size:medium;">CATEGORY LIST </h5>
+        
+        <div class="row mt-4">
+            <!-- Display categories with edit, add, and delete options -->
+            <div class="col-md-12">
+            
+                <ul class="list-group text-center mt-5" style="width: 90%;">
+                    {{#each categories}}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                              {{this.name}}
+                            </div>
+                            <div>
+                               <button class="button" style="background-color: #b9a2e2bd;"><a href="/product/categories/edit/{{this._id}}" class="btn  btn-sm" >Edit</a></button> 
+                               <button  class="btn btn-sm delete-category" style="background-color: #b9a2e2bd;"  data-id="{{this._id}}" >Delete</button> 
+                            </div>
+                        </li>
+                    {{/each}}
+                </ul> <br><br>
+                <hr>
+               
+            </div>
+        </div>
+        
+    
+        
+        <div class="row mt-4">
+            <!-- Display products grouped by category -->
+            <div class="col-md-12">
+                <h5 style="font-weight: 400;font-size:medium; ">Products</h5>
+                {{#each categories}}
+                    <h5 style="font-weight: 400;font-size:medium; ">{{this.name}}</h5>
+                    <ul class="list-group">
+                        {{#each ../products}}
+                            {{#if (pq this.category._id ../_id)}}
+                                <li class="list-group-item">
+                                    {{this.name}} - ${{this.price}}
+                                </li>
+                            {{/if}}
+                        {{/each}}
+                    </ul>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    </div>
+ <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12lGb8oHKc7+90iDOzlg29re4pTiw1FWRdsvOM5GdRJAn56E" crossorigin="anonymous"></script>
+
+    <script>
+       $(document).ready(function(){
+           $('.delete-category').click(function() {
+                const orderId = $(this).data('id');
+
+                iziToast.show({
+                    title: 'Confirm Delete?',
+                    message: 'Are you sure you want to delete this category?',
+                    position: 'topCenter',
+                    timeout: false,
+                    buttons: [
+                        ['<button>Yes</button>', function (instance, toast) {
+                            $.ajax({
+                                type: 'POST',
+                                url: `/product/categories/delete/${orderId}`,
+                                success: function(response) {
+                                    iziToast.success({
+                                        title: 'Success',
+                                        message: 'category deleted successfully',
+                                        position: 'center',
+                                        timeout: 3000,
+                                        icon: 'icon-checkmark',
+                                        color: 'green'
+                                    });
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 1700);
+                                },
+                                error: function(xhr, status, error) {
+                                    iziToast.error({
+                                        title: 'Error',
+                                        message: xhr.responseText,
+                                        position: 'center',
+                                        timeout: 3000
+                                    });
+                                }
+                            });
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }],
+                        ['<button>No</button>', function (instance, toast) {
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }]
+                    ]
+                });
+            });
+
+       }) 
+    </script>
+</body>
+</html>

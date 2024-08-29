@@ -1,0 +1,43 @@
+.login{
+    margin-top: 40px;
+    align-items: center;
+    height: 350px;
+    width: 500px;
+    background-color: #85737124;
+    
+}
+#nav{
+    
+    background-color: #EAEAEA;
+}
+body{
+    margin: 0;
+    background-color: #eaeaea66
+}
+.button{
+    margin-left: 15px;
+    margin-top: 13px;
+    width: 98px;
+    height: 30px;
+    border: 0px solid black;
+    background-color: #7b7274a1;
+    color: white;
+    font-size: small;
+}
+.form-control{
+    border-radius: 0px;
+}
+.footer{
+   
+    padding-left: 15px;
+    padding-top: 13px;
+    color: #72696e;
+    font-size: small;
+    background-color: #e2dddd3b;
+}
+.iti__selected-flag{
+    margin-left: 10px;
+}
+.intl-tel-input{
+    margin-top: 7px;
+}

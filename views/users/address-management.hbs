@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+     <link rel="stylesheet" href="/login.css">
+    <title>Address Management</title>
+</head>
+<body>
+     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#home">
+                <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px; margin-top:-15px; width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-item nav-link active" href="/" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                    <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                    <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                    <a class="nav-item nav-link" href="/contact" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+                </div>
+                 
+                <div class="d-flex" style="margin-left: 40px;">
+                    <a href="/login" class="ml-3">
+                        <img src="/images/user (1).png" alt="" style="width: 18px; height: 18px; margin-right:39px;">
+                    </a>
+                    <a href="/cart">
+                        <img src="/images/shopping-cart.png" alt="" style="width: 20px; height: 20px; margin-right: 29px;">
+                        <span class="badge" style="background-color: #756f6e;font-size: 8px;margin-left: -28px">{{session.cart.totalQty}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav> 
+    <br><br><br>
+    {{#if user}}
+    <div class="container text-align mx-auto text-center">
+        <h3 class="" style="color: #7B7274; padding-top: 30px; font-weight: 200;">Addresses</h3>
+        <a href="/userinfo/{{user._id}}" style="color: #756f6e;">Return to Account details</a>
+        <div class="row mt-5 justify-content-center">
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary" style="background-color: #9a847a; --bs-btn-border-color: antiquewhite" onclick="window.location.href='/add-address/{{user._id}}'">Add New Address</button>
+            </div>
+            {{#each user.addresses}}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" style="font-weight: 400; color: #756f6e;">{{this.fullname}}</h5>
+                        <p class="card-text" style="color: #756f6e;">
+                            {{this.address}}, <br> {{this.city}}, {{this.state}}, <br> {{this.country}}, <br> {{this.postcode}}<br>
+                            Phone: {{this.phonenumber}}
+                        </p>
+                        {{#if this.primary}}
+                            <p class="text-success">Primary Address</p>
+                        {{else}}
+                            <button class="btn btn-outline-success mb-2" style="font-size: small;" onclick="setPrimaryAddress('{{../user._id}}', '{{this._id}}')">Set as Primary</button>
+                        {{/if}}
+                        <button class="btn btn-outline-secondary mb-2" style="font-size: small;" onclick="window.location.href='/edit-address/{{../user._id}}/{{this._id}}'">EDIT</button>
+                       <form id="delete-form-{{this._id}}" action="/delete-address/{{../user._id}}/{{this._id}}" method="POST" style="display:inline;">
+    <button type="button" class="btn btn-outline-danger" style="font-size: small;margin-top: -8px;" onclick="confirmDelete('{{this._id}}')">DELETE</button>
+</form>
+
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{/if}}
+    
+    <br><br>
+    <section class="footer">
+        Stay Connected: <br><br>
+        Facebook | Instagram | Twitter <br><br>
+        Quick Links: <br><br>
+        About Us | Contact Us | Privacy Policy | Terms of Service <br><br>
+        © 2024 Women Fashion. All rights reserved. <br><br>
+    </section>
+
+   <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2s5dyh7W1fggtde7Fq6T0pCzG/D4IWlTV4D/R4evzB+BfjWszC6I1QhN9i0" crossorigin="anonymous"></script>
+  
+    <script>
+        function setPrimaryAddress(userId, addressId) {
+            $.ajax({
+                type: 'POST',
+                url: `/set-primary-address`,
+                data: { userId: userId, addressId: addressId },
+                success: function(response) {
+                    iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                            position: 'topCenter',
+                            timeout: 3000,
+                            icon: 'icon-checkmark',
+                            color: 'green'
+                        });
+                        setTimeout(function() {
+                            window.location.reload()
+                        }, 1700); // Redirect after toast disappears
+                    },
+                    error: function(xhr, status, error){
+                        iziToast.error({
+                            title: 'Error',
+                            message: xhr.responseText,
+                            position: 'center',
+                            timeout: 3000
+                        });
+                    }
+            });
+        }
+
+        
+    </script>
+
+    <script>
+function confirmDelete(addressId) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this address?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // If confirmed, submit the form
+            document.getElementById(`delete-form-${addressId}`).submit();
+        }
+    });
+}
+</script>
+</body>
+</html>

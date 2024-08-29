@@ -1,0 +1,78 @@
+#nav{
+    background-color: white;
+}
+body{
+    margin: 0;
+    background-color: #eaeaea66
+}
+.firstpic{
+  
+    background-color: #EDEFF3;
+}
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+}
+.scroll-container .scroll-item {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 100%;
+    
+}
+.scroll-container::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+} 
+.text-content {
+    color: #7B7274;
+    width: inherit;
+    text-align: center;
+  
+    line-height: 1.5;
+    max-width: 100px; 
+}
+.secondpic{
+    background-color: #cba995a1;
+}
+.thirdpic{
+    background-color: #cfcdc7f2;
+}
+.button{
+   
+    margin-top: 13px;
+    width: 118px;
+    height: 48px;
+    border: 0px solid black;
+    background-color: #7b7274a1;
+    color: white;
+}
+.content{
+    color: #72696e;
+    height: 224px;
+    align-content: center;
+    width: 95%;
+    text-align: justify;
+}
+.mostloved{
+    color: #72696e;
+
+    align-content: center;
+    width: 95%;
+
+}
+
+.category-list h3 {
+    cursor: pointer;
+ 
+}
+.category-list h3:hover {
+    color: #000;
+}
+.footer{
+    padding-left: 15px;
+    padding-top: 17px;
+    color: #72696e;
+    font-size: small;
+    background-color: #706e6a12;
+}

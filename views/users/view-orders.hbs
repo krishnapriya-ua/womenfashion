@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast/dist/css/iziToast.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>My Orders</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js" integrity="sha512-hUhvpC5f8cgc04OZb55j0KNGh4eh7dLxd/dPSJ5VyzqDWxsayYbojWyl5Tkcgrmb/RVKCRJI1jNlRbVP4WWC4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#home">
+            <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px; margin-top:-15px; width: 90px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mx-auto">
+                <a class="nav-item nav-link active" href="/" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                <a class="nav-item nav-link" href="/contact" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+            </div>
+            <div class="d-flex" style="margin-left: 40px;">
+                <a href="/login" class="ml-3">
+                    <img src="/images/user (1).png" calt="" style="width: 18px; height: 18px; margin-right:39px;">
+                </a>
+                <a href="/cart">
+                    <img src="/images/shopping-cart.png" alt="" style="width: 20px; height: 20px; margin-right: 29px;">
+                    <span class="badge" style="background-color: #756f6e;font-size: 8px;margin-left: -28px">{{session.cart.totalQty}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<br><br><br>
+
+<div class="container mt-5">
+     <h5 class="text-center">My Orders</h5>
+    {{#each orders}}
+   
+        <div class="order mt-4" >
+             {{#each items}}
+                <div class="row mt-4">
+                    <div class="col-md-2 col-4  mb-1">
+                         <a href="/shop/details/{{this.product._id}}" style="text-decoration: none;">
+                        <img src="/product-images/{{this.product.images.[0]}}" style="width: 90px; height:auto;"> <br>
+                         </a>
+                    </div>
+                    <div class="col-md-10 col-8 mt-3">
+                        <p style="font-size: smaller; margin-left:-10px">
+                            <strong>{{this.product.name}}</strong><br>
+                            Amount: Rs. {{this.product.discountprice}}<br>
+                            Quantity: {{this.quantity}} <br>
+                          status:{{../status}}
+                          
+                        </p>
+                    </div>
+                </div>
+                
+            {{/each}}
+           
+                    <span style="font-size: smaller;" >
+                          Total:Rs.{{this.totalPrice}} 
+                      
+                    </span> <br>
+                  {{#if (eq this.status 'pending')}}
+    <button class="button btn-sm cancel-order" style="font-size: smaller;margin-left: 0px;" data-id="{{this._id}}" data-product-name="{{this.items.[0].product.name}}">Cancel Order</button>
+{{/if}} 
+
+{{#if (eq this.status 'payment pending')}}
+ <button class="pay-now" data-order-id="ORDER_ID" data-total-price="TOTAL_PRICE">
+    Retry payment
+</button>
+{{/if}}
+{{#if (and (eq this.status 'delivered') (not this.returnRequested))}}
+    <button class="btn btn-primary btn-sm return-order" style="font-size: smaller;" data-id="{{this._id}}" data-product-name="{{this.items.[0].product.name}}">Return Order</button>
+{{/if}}
+<a href="/order-details/{{this._id}}"><button class="button" style="background-color: #6f9db2;margin-left: 0px;margin-top0px">View-Details</button></a>
+
+
+        <hr>
+                    {{else}}
+    <div class="mt-5" style="margin-left: 3px;">
+    <p style="color: #615859; font-size: smaller;" class="mt-5">YOU HAVEN'T ORDERED YET</p>
+    <button style="border: 1px solid #615859;
+    width: max-content;
+    height: 40px;
+    font-size: smaller"><a href="/shop" style="text-decoration: none;color:#615859">RETURN TO SHOP</a></button>
+    </div>
+                </div>
+                  {{/each}}
+            </div>
+          
+        </div>
+   
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+<script>
+
+ $(document).ready(function() {
+    // Handle Return Order
+      $('.return-order').click(function() {
+                const orderId = $(this).data('id');
+
+                iziToast.show({
+                    title: 'Confirm Approval',
+                    message: 'Are you sure you want to retrurn this return?',
+                    position: 'topCenter',
+                    timeout: false,
+                    buttons: [
+                        ['<button>Yes</button>', function (instance, toast) {
+                            $.ajax({
+                                type: 'POST',
+                                url: `/view-orders/return/${orderId}`,
+                                success: function(response) {
+                                    iziToast.success({
+                                        title: 'Success',
+                                        message: response.message,
+                                        position: 'center',
+                                        timeout: 3000,
+                                        icon: 'icon-checkmark',
+                                        color: 'green'
+                                    });
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 1700);
+                                },
+                                error: function(xhr, status, error) {
+                                    iziToast.error({
+                                        title: 'Error',
+                                        message: xhr.responseText,
+                                        position: 'center',
+                                        timeout: 3000
+                                    });
+                                }
+                            });
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }],
+                        ['<button>No</button>', function (instance, toast) {
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }]
+                    ]
+                });
+            });
+
+    // Handle Cancel Order
+    $('.cancel-order').click(function() {
+                const orderId = $(this).data('id');
+
+                iziToast.show({
+                    title: 'Confirm Approval',
+                    message: 'Are you sure you want to cancel this return?',
+                    position: 'topCenter',
+                    timeout: false,
+                    buttons: [
+                        ['<button>Yes</button>', function (instance, toast) {
+                            $.ajax({
+                                type: 'POST',
+                                url: `/view-orders/cancel/${orderId}`,
+                                success: function(response) {
+                                    iziToast.success({
+                                        title: 'Success',
+                                        message: response.message,
+                                        position: 'center',
+                                        timeout: 3000,
+                                        icon: 'icon-checkmark',
+                                        color: 'green'
+                                    });
+                                    setTimeout(function() {
+                                        window.location.reload();
+                                    }, 1700);
+                                },
+                                error: function(xhr, status, error) {
+                                    iziToast.error({
+                                        title: 'Error',
+                                        message: xhr.responseText,
+                                        position: 'center',
+                                        timeout: 3000
+                                    });
+                                }
+                            });
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }],
+                        ['<button>No</button>', function (instance, toast) {
+                            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+                        }]
+                    ]
+                });
+            });
+ })
+</script>
+
+<script>
+$(document).ready(function() {
+    $('.pay-now').click(function() {
+        const orderId = $(this).data('order-id');
+        const totalPrice = $(this).data('total-price');
+
+        fetch('/pay-now', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            paymentMethod: 'razorpay',
+         
+            totalPrice: totalPrice,
+            
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.orderId) {
+            var options = {
+                key: data.key, // Your Razorpay key
+                amount: data.amount, // Amount in paise
+                currency: data.currency,
+                name: 'WOMEN FASHION',
+                description: 'Order Payment',
+                order_id: data.orderId,
+                handler: function(response) {
+                    fetch('/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            paymentId: response.razorpay_payment_id,
+                            orderId: response.razorpay_order_id,
+                            razorpaySignature: response.razorpay_signature,
+                           
+                            totalPrice: totalPrice
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.message === 'Order placed successfully') {
+                            iziToast.success({
+                                title: 'Success',
+                                message: 'Payment successful!',
+                                position: 'topCenter'
+                            });
+                                setTimeout(() => window.location.href = '/order-now', 1700);
+                            } else {
+                                iziToast.error({
+                                    title: 'Error',
+                                    message: 'Payment verification failed',
+                                    position: 'topCenter'
+                                });
+                                setTimeout(() => window.location.href = '/view-orders', 1700);
+                            }
+                        })
+                        .catch(() => {
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'An error occurred during payment verification',
+                                position: 'topRight'
+                            });
+                            setTimeout(() => window.location.href = '/view-orders', 1700);
+                        });
+                    },
+                    prefill: {
+                        name: 'Customer Name',
+                        email: 'customer@example.com',
+                        contact: '9999999999'
+                    },
+                    theme: {
+                        color: '#3399cc'
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            window.location.href = '/view-orders';
+                        }
+                    }
+                };
+                var rzp = new Razorpay(options);
+                rzp.on('payment.failed', function(response) {
+                    iziToast.error({
+                        title: 'Payment Failed',
+                        message: 'The payment failed. Please try again.',
+                        position: 'topCenter'
+                    });
+                    setTimeout(() => window.location.href = '/view-orders', 1700);
+                });
+                rzp.open();
+            } else {
+                iziToast.error({
+                    title: 'Error',
+                    message: 'Order ID not returned',
+                    position: 'topCenter'
+                });
+            }
+        })
+        .catch(() => {
+            iziToast.error({
+                title: 'Error',
+                message: 'An error occurred during payment initiation',
+                position: 'topRight'
+            });
+        });
+    });
+});
+</script>
+
+
+
+
+  
+</body>
+</html>

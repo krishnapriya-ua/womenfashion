@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results</h1>
+    {{#if products.length}}
+        <ul>
+            {{#each products}}
+                <li>{{this.name}} - {{this.category}}</li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>No products found.</p>
+    {{/if}}
+</body>
+</html>

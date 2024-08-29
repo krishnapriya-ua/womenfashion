@@ -1,0 +1,31 @@
+#nav{
+    position: fixed;
+    /* margin-top: 0px; */
+    width: 100%;
+    background-color: #f3f3f3;
+ }
+ .sidebar {
+    height: 100vh;
+    position: fixed;
+    width: 200px;
+    background-color: #e1e1e269;
+    margin-top: 90px;
+    padding-left: 13px;
+    width: 156px;
+    padding-top: 42px;
+ }
+ .sidebar a {
+    padding: 17px;
+text-align: left;
+text-decoration: none;
+font-size: smaller;
+color: #5f5152;
+display: block;
+ }
+ .sidebar a:hover {
+     background-color: #ddd;
+ }
+ .content {
+     margin-left: 220px; /* Adjust based on your sidebar width */
+     padding: 20px;
+ }

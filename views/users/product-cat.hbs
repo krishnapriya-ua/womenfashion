@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <title>Product Filters</title>
+    <style>
+        .dropdown-menu .collapse {
+            padding-left: 15px;
+        }
+        .dropdown-item {
+            color: #887374;
+            font-size: small;
+        }
+        #searchBar {
+            display: none;
+            position: absolute; /* Changed from margin to position */
+            top: 60px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 322px;
+        }
+        #searchBar input {
+            padding: 18px;
+            width: 100%; /* Adjust to fit the container */
+            height: 52px;
+            margin-top: 18px;
+            margin-bottom: 10px;
+             /* Adjust to align properly */
+        }
+        #searchBar button {
+            padding: 5px 10px;
+            width: 100%; /* Adjust to fit the container */
+        }
+         .results-container {
+            display: none; 
+        }
+        #feedbackMessage {
+            color: rgb(241, 173, 173);
+            font-size: small;
+           
+            display: none; 
+        }
+         #filterPanel {
+        display: none; /* Hide the filter panel by default */
+        background-color: #f8f9fa;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        position: absolute; /* Position it absolutely relative to the button */
+       
+        z-index: 1000; /* Make sure it appears on top */
+      } 
+
+    .filter-section {
+        margin-bottom: 15px;
+    }
+
+    .price-slider {
+        width: 100%;
+    }
+    .filter-section{
+        display: flex;
+    flex-direction: column
+    }
+     
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#home">
+                <img src="./images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px; margin-top: -15px; width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-item nav-link active" href="/" style="padding-left: 70px; font-weight: 100; font-size: small;">HOME</a>
+                    <a class="nav-item nav-link" href="/shop" style="padding-left: 78px; font-weight: 100; font-size: small;">SHOP</a>
+                    <a class="nav-item nav-link" href="/about" style="padding-left: 78px; font-weight: 100; font-size: small;">ABOUT</a>
+                    <a class="nav-item nav-link" href="/contact" style="padding-left: 78px; font-weight: 100; font-size: small;">CONTACT</a>
+                </div>
+                <div class="d-flex">
+                    <span class="search-icon" id="searchIcon">
+                        <img src="/images/314807_search_icon.png" style="width: 30px; height: auto; margin-right: 60px; margin-top: 3px;" alt="">
+                    </span>
+                    <a href="/login">
+                        <img src="/images/user (1).png" alt="User" style="width: 18px; height: 18px; margin-right: 59px;">
+                    </a>
+                    <a href="/cart">
+                        <img src="/images/shopping-cart.png" alt="Cart" style="width: 20px; height: 20px; margin-right: 29px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav> <br>
+
+    <div id="searchBar" class="mt-5">
+        <input type="text" style="height: 30px;border: 1px solid #988687;" id="searchQuery" placeholder="Search...">
+         <span id="feedbackMessage"></span> 
+        <button class="button" style="height: 32px; background-color: #887374db;margin-left: 0px;" id="searchButton">Search</button>
+    </div>
+
+    <section class="container-fluid mostloved">
+        <h4 style="color: #796e74; font-weight: 600; padding-left: 21px; padding-top: 99px"> {{uppercase categoryName}} <hr></h4> <br><br>
+ <div class="container-fluid" style="margin-top: 70px;">
+    <div class="row">
+
+
+       <!-- Filter Panel -->
+<div class="col-md-3" style="margin-top: -71px; margin-left: 9px;">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="openFilterPanelBtn"
+            style="background-color: #887374; border-color: white; border-radius: 0px; width: 79px; font-weight: 100; height: 41px; font-size: smaller;" aria-expanded="false">
+        FILTER
+    </button>
+    <div id="filterPanel">
+        <!-- Category Filter -->
+        <div class="filter-section">
+            <h5>Category</h5>
+            {{#each categories}}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           name="categories" 
+                           value="{{this._id}}" 
+                           id="category{{this._id}}"
+                           {{#if (inArray ../selectedCategories this._id)}}checked{{/if}}>
+                    <label class="form-check-label" for="category{{this._id}}">{{this.name}}</label>
+                </div>
+            {{/each}}
+        </div>
+        
+        <!-- Price Range Filter -->
+        <div class="filter-section">
+            <h5>Price</h5>
+            <input type="range" class="form-range price-slider" 
+                   min="500" max="8000" step="100" 
+                   id="priceRange" 
+                   value="{{priceRange.min}}">
+            <p>Price Range: Rs.<span id="priceRangeValue">{{priceRange.min}}</span> - Rs.<span id="priceRangeValueMax">{{priceRange.max}}</span></p>
+        </div>
+        
+        <button class="btn btn-primary" id="applyFiltersBtn">Apply Filters</button>
+    </div>
+</div>
+
+
+        <div class="" style="margin-top: -71px; margin-left:95px;">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
+                        style="background-color: transparent; border-color: white; height: 41px; font-weight: 400; font-size: smaller; color: #887374; border: 1px solid black; width: 153px; border-radius: 0px;" data-bs-toggle="dropdown" aria-expanded="false">
+                    SORT BY
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                    <li><a class="dropdown-item" href="/shop?sort=az">Alphabet A-Z</a></li>
+                    <li><a class="dropdown-item" href="/shop?sort=za">Alphabet Z-A</a></li>
+                    <li><a class="dropdown-item" href="/shop?sort=priceLowHigh">Price Low to High</a></li>
+                    <li><a class="dropdown-item" href="/shop?sort=priceHighLow">Price High to Low</a></li>
+                    <li><a class="dropdown-item" href="/shop?sort=featured">Featured</a></li>
+                    <li><a class="dropdown-item" href="/shop?sort=popularity">Popularity</a></li>
+                    <li><a class="dropdown-item" href="/shop?sort=newArrivals">New Arrivals</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="results-container" id="resultsContainer">
+         
+        </div>
+        <div id="noResultsMessage" style="display: none; color: #72696e; margin-left: 15px;">
+    No results found for your query.
+</div>
+
+<div class="row " id="productList">
+    {{#if products.length}}
+  {{#each products}}
+  <div class="col-md-3 col-sm-3 col-6 product-item">
+    <a href="/shop/details/{{this._id}}" style="text-decoration: none;">
+      <img src="/product-images/{{this.images.[0]}}" alt="" class="img-fluid">
+      <p style="line-height: 28px; text-decoration: none; color: #72696e;">{{this.name}}<br>Rs.{{this.discountprice}}</p>
+    </a>
+  </div>
+  {{/each}} 
+   {{else}}
+        <p>No products found matching your criteria.</p>
+    {{/if}}
+  
+
+  
+</div>
+
+       
+
+
+<br> <hr>
+
+
+</section>
+
+
+    
+
+
+    <section class="footer" >
+        Stay Connected: <br><br>
+         Facebook | Instagram | Twitter <br> <br>
+           Quick Links: <br><br>
+          About Us | Contact Us | Privacy Policy | Terms of Service <br> <br>
+
+          © 2024 Women Fashion. All rights reserved. <br><br>
+    </section>
+       
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+vIdidONjY8si1p00T9P1gXoE4J92" crossorigin="anonymous"></script>
+  <script>
+    document.getElementById('applyFiltersBtn').addEventListener('click', () => {
+    let categories = [];
+    document.querySelectorAll('input[name="categories"]:checked').forEach((checkbox) => {
+        categories.push(checkbox.value);
+    });
+
+    let minPrice = document.getElementById('priceRange').value;
+    let maxPrice = document.getElementById('priceRange').max;
+
+    // Construct the query string
+    let queryString = `?categories=${categories.join(',')}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+
+    // Redirect to the filtered results
+    window.location.href = `/shop${queryString}`;
+});
+  </script>
+  
+  
+  <script>
+    $(document).ready(function () {
+        $('#searchIcon').click(function () {
+            $('#searchBar').toggle();
+            $('#searchQuery').focus(); // Focus on search input when shown
+        });
+
+        $('#searchQuery').on('input', function () {
+            var query = $(this).val();
+            var feedback = $('#feedbackMessage');
+            var noResultsMessage = $('#noResultsMessage');
+
+            // Basic validation
+            if (query.length === 0) {
+                feedback.text('Please enter a search term').show();
+                $('#resultsContainer').hide();
+                $('#noResultsMessage').hide();
+                $('#productList').show();
+            } else if (/^\d+$/.test(query)) { // Check if query is a number
+                feedback.text('Numbers are not allowed in search').show();
+                $('#resultsContainer').hide();
+                $('#noResultsMessage').hide();
+                $('#productList').show();
+            } else {
+                feedback.hide();
+                $.ajax({
+                    url: '/shop/search',
+                    type: 'GET',
+                    data: { q: query },
+                    success: function (data) {
+                        if (data.products.length === 0) {
+                            $('#resultsContainer').hide();
+                            $('#noResultsMessage').show();
+                            $('#productList').hide();
+                        } else {
+                            $('#noResultsMessage').hide();
+                            var html = '<div class="row m-2">';
+                            data.products.forEach(function (product) {
+                                html += '<div class="col-md-3 col-sm-3 col-6 product-item">';
+                                html += '<a href="/shop/details/' + product._id + '" style="text-decoration: none;">';
+                                html += '<img src="/product-images/' + product.images[0] + '" alt="" class="img-fluid">';
+                                html += '<p style="line-height: 28px; text-decoration: none; color: #72696e;">' + product.name + '<br>Rs.' + product.price + '</p><br><br>';
+                                html += '</a></div>';
+                            });
+                            html += '</div>';
+                            $('#resultsContainer').html(html).show();
+                            $('#productList').hide();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+                $('#openFilterPanelBtn').click(function () {
+                $('#filterPanel').toggle(); // Toggle the visibility of the filter panel
+            });
+
+            // Handle price range change
+            $('#priceRange').on('input', function () {
+                $('#priceRangeValue').text($(this).val());
+            });
+
+            // Handle checkbox changes
+            $('#filterPanel input').on('change', function () {
+                performSearch();
+            });
+
+            function performSearch() {
+                var categories = $('#filterPanel #categoryFilter input:checked').map(function() { return this.value; }).get();
+                var colors = $('#filterPanel #colorFilter input:checked').map(function() { return this.value; }).get();
+                var fabrics = $('#filterPanel #fabricFilter input:checked').map(function() { return this.value; }).get();
+                var priceRange = $('#priceRange').val();
+
+                $.ajax({
+                    url: '/shop/search',
+                    type: 'GET',
+                    data: {
+                        categories: categories,
+                        colors: colors,
+                        fabrics: fabrics,
+                        priceRange: priceRange
+                    },
+                    success: function (data) {
+                        if (data.products.length === 0) {
+                            $('#resultsContainer').hide();
+                            $('#noResultsMessage').show();
+                        } else {
+                            $('#noResultsMessage').hide();
+                            var html = '<div class="row m-2">';
+                            data.products.forEach(function (product) {
+                                html += '<div class="col-md-3 col-sm-3 col-6 product-item">';
+                                html += '<a href="/shop/details/' + product._id + '" style="text-decoration: none;">';
+                                html += '<img src="/product-images/' + product.images[0] + '" alt="" class="img-fluid">';
+                                html += '<p style="line-height: 28px; text-decoration: none; color: #72696e;">' + product.name + '<br>Rs.' + product.price + '</p><br><br>';
+                                html += '</a></div>';
+                            });
+                            html += '</div>';
+                            $('#resultsContainer').html(html).show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error:', error);
+                    }
+                });
+            }
+
+        function sortProducts(type) {
+            var products = $('.product-item'); // Assuming .product-item is the class for product divs
+            products.sort(function (a, b) {
+                var textA = $(a).find('p').text().trim().toUpperCase();
+                var textB = $(b).find('p').text().trim().toUpperCase();
+                var priceA = parseFloat($(a).find('.price').text().replace('Rs.', ''));
+                var priceB = parseFloat($(b).find('.price').text().replace('Rs.', ''));
+
+                if (type === 'az') {
+                    return textA.localeCompare(textB);
+                } else if (type === 'za') {
+                    return textB.localeCompare(textA);
+                } else if (type === 'priceLowHigh') {
+                    return priceA - priceB;
+                } else if (type === 'priceHighLow') {
+                    return priceB - priceA;
+                }
+            });
+
+            $('.products-container').html(products); // Assuming .products-container is the class for the container of product divs
+        }
+
+          
+    });
+</script>
+
+</body>
+</html>

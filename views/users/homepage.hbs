@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+     <link rel="stylesheet" href="/css/home.css">
+    <title>Homepage</title>
+</head>
+<body>
+ 
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#home">
+                <img src="./images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px; margin-top:-15px; width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-item nav-link active" href="#home" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                    <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                    <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                    <a class="nav-item nav-link" href="/contact" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+                </div>
+                  {{#if user}}
+                    <div class="userinfo">
+                        <a href="/userinfo/{{user._id}}" class="btn nav-item nav-link" style="font-size: small;
+    font-weight: 500;
+    color: #580e22b0" >Hello, {{user.username}} </a>
+                    </div>
+                     {{/if}}
+                <div class="d-flex" style="margin-left: 40px;">
+                   
+                    <a href="/login" class="ml-3" >
+          
+                        <img src="./images/user (1).png" calt="" style="width: 18px; height: 18px; margin-right:39px;">
+                    </a>
+                 
+                  <a href="/cart" style="position: relative;">
+        <img src="/images/shopping-cart.png" alt="Cart" style="width: 20px; height: 20px; ">
+        {{#if cart.totalQty}}
+   
+        <span class="badge text-white badge-position" style="   background-color: #757171;
+    border-radius: 88px;
+    font-size: x-small;" >{{cart.totalQty}}</span>
+
+        {{/if}}
+        </a>
+    
+         </div>
+         </div>
+   </div>
+    </nav>
+
+    <section class="scroll-container" id="scrollContainer" style="margin-top: 75px;">
+        <section class="firstpic scroll-item">
+            <div class="row" id="home">
+                <div class="col-md-6 col-sm-12">
+                    <img src="./images/firstpic.png" alt="" srcset="" class="img-fluid">
+                </div>
+                <div class="col-md-6 col-sm-12 d-flex flex-column justify-content-center">
+                    <h3 style="color: #7e7c7d;margin-left: 10px;">Elegance Drapped in Tradition: </h3>
+                    <h3 style="color: #7e7c7d;margin-left: 10px;"> Discover the Exquisite</h3>
+                    <a href="/shop/categories/Saree">
+                    <button class="button" id="saree" style="margin-left: 10px;">EXPLORE</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section class="secondpic scroll-item" style="margin-left: 22px;">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <img src="./images/secondpic.png" alt="" srcset="" class="img-fluid">
+                </div>
+                <div class="col-md-6 col-sm-12 d-flex flex-column justify-content-center">
+                    <h3 style="color: #61474de8;margin-left: 10px;">Threads of Grace:</h3>
+                    <h3 style="color: #61474de8;margin-left: 10px;">Beautiful and Timeless Tops</h3>
+                     <a href="/shop/categories/Kurta set">
+                    <button class="button" id="saree" style="background-color: #755b5e73; margin-left: 10px;">EXPLORE</button>
+                  </a>
+                </div>
+                
+            </div>
+        </section>
+        <section class="thirdpic scroll-item" style="margin-left: 18px;">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <img src="./images/thirdpic.png" alt="" srcset="" class="img-fluid">
+                </div>
+                <div class="col-md-6 col-sm-12 d-flex flex-column justify-content-center">
+                    <h3 style=" color: #645d5c;margin-left: 10px;">Dare to Bare: </h3>
+                    <h3 style=" color: #645d5c;margin-left: 10px;">Embrace the Confidence</h3>
+                     <a href="/shop/categories/Dress">
+                    <button class="button" style="margin-left: 10px;">EXPLORE</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </section>
+  <section class="container-fluid content col-md-12 col-sm-12" style="margin-left: -5px;margin-top: 16px;margin-bottom: 16px;font: size 15px;" >
+    Welcome to Women Fashion, where minimalist elegance meets curated style. 
+     Explore our carefully selected  women's fashion collections designed for the modern minimalist. 
+     Discover timeless pieces that effortlessly blend simplicity with sophistication. 
+     Elevate  your wardrobe with every visit to Women Fashion, where quality and style converge seamlessly. 
+  </section> 
+  <section class="container-fluid catogories ">
+    <h4 style="text-align: center;color: #796e74;
+    font-weight: 400;">EXPLORE BY CATEGORIES <hr></h4>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 align-items-center">
+            <img id="categoryImage" src="./images/saree20.4.webp" alt="" class="img-fluid">
+        </div>
+        <div class="col-md-6 col-sm-6 d-flex flex-column justify-content-center category-list">
+            <br><br>
+            <a href="/shop/categories/Saree" style="text-decoration: none;">
+            <h3 onmouseover="changeImage('saree')" style="color: #7e7c7d; margin-left: 10px; font-size:larger; ">SAREES  </h3><hr><br>
+            </a>
+            <a href="/shop/categories/Kurta set"style="text-decoration: none;">
+            <h3 onmouseover="changeImage('kurta')" style="color: #7e7c7d; margin-left: 10px; font-size:larger;">KURTA SETS <hr></h3><br>
+            </a>
+            <a href="/shop/categories/Dress"style="text-decoration: none;">
+            <h3 onmouseover="changeImage('dress')" style="color: #7e7c7d; margin-left: 10px; font-size: larger;">DRESSES <hr></h3><br>
+            </a>
+            <a href="/shop/categories/Dupatta"style="text-decoration: none;">
+            <h3 onmouseover="changeImage('dupatta')" style="color: #7e7c7d; margin-left: 10px; font-size:larger;">DUPATTAS <hr></h3><br>
+            </a>
+        </div>
+    </div>
+
+  </section>
+<section class="container-fluid mostloved"><br>
+    <h4 style="text-align: center; color: #796e74; font-weight: 400;">MOST LOVED <hr></h4> <br>
+    <div class="row">
+       {{#if products.length}}
+          {{#each products}}
+          <div class="col-md-3 col-sm-3 col-6 product-item">
+            <a href="/shop/details/{{this._id}}" style="text-decoration: none;">
+              <img src="/product-images/{{this.images.[0]}}" alt="{{this.name}}" class="img-fluid">
+              <p style="line-height: 28px; text-decoration: none; color: #72696e;">
+                {{this.name}}<br>Rs.{{this.discountprice}}
+              </p><br><br>
+            </a>
+          </div>
+          {{/each}} 
+       {{else}}
+          <p>No products found matching your criteria.</p>
+       {{/if}}
+    </div>
+</section>
+<section class="container-fluid"><br><br><br>
+    <h4 style="text-align: center; color: #796e74; font-weight: 400;">FROM WOMEN FASHION <hr></h4> <br>
+    <div class="row" style="background-color: #957d330a;">
+        {{#if popularProducts.length}}
+            {{#each popularProducts}}
+            <div class="col-md-4 col-sm-12 my-auto d-flex justify-content-start">
+                <a href="/shop/details/{{this._id}}" style="text-decoration: none;">
+                    <img src="/product-images/{{this.images.[0]}}" alt="{{this.name}}" class="img-fluid" style="max-width: 100%;">
+                </a>
+            </div>
+            <div class="col-md-8 col-sm-12 my-auto">
+                <h5 style="color: #61474de8; margin-left: 10px;">{{this.name}}</h5>
+                <p style="color: #61474de8; margin-left: 10px;">Rs.{{this.discountprice}}</p>
+            </div>
+            {{/each}}
+        {{else}}
+            <p>No popular products found.</p>
+        {{/if}}
+    </div><br><br>
+</section>
+
+
+
+    <section class="container-fluid thankyou">
+        <div class="row" style="background-color: #f9b8c73d;" >
+       
+        <div class="col-md-8 col-sm-12 my-auto " style=" color: #72696e;text-align: justify; " >
+
+               Thank you for choosing Women Fashion for your shopping needs! Your support means the world to us.
+               We invite you to join our exclusive community to early access to our latest collections 
+               and promotions. 
+               Stay connected with us to make the most of your shopping 
+              experience and never miss out on our fabulous offers. Thank you for being a part of the 
+              Women Fashion family! <br>
+              <button class="button" style="height: 98%; width: auto; font-size: small;">JOIN NOW</button>
+        </div>
+        <div class="col-md-4 col-sm-12 mx-auto">
+            <img src="./images/wallpapers8.webp" style="width:106%;
+             margin-left: -12px;" alt="" srcset="">
+        </div>
+    </div>
+    </section><br>
+    <section class="icon">
+        <div class="row mx-auto" style="height: 200px; align-items: center;">
+            <div class="col-md-3 col-sm-3 col-3 text-center">
+                <img src="./images/delivery-truck.png" style="width: 30px;" alt="">
+                <p style="color: #72696e; font-size: x-small;">FAST SHIPPING</p>
+            </div>
+            <div class="col-md-3 col-sm-3 col-3 text-center">
+                <img src="./images/farming.png" style="width: 30px;" alt="">
+                <p style="color: #72696e; font-size: x-small;">ECO FRIENDLY</p>
+            </div>
+            <div class="col-md-3 col-sm-3 col-3 text-center">
+                <img src="./images/shakehand.png" style="width: 30px;" alt="">
+                <p style="color: #72696e; font-size: x-small;">BEST QUALITY</p>
+            </div>
+            <div class="col-md-3 col-sm-3 col-3 text-center">
+                <img src="./images/woven.png" style="width: 21px;" alt="">
+                <p style="color: #72696e; font-size: x-small;">HAND WOVEN</p>
+            </div>
+        </div>
+    </section>
+
+    
+
+
+    <section class="footer" >
+        Stay Connected: <br><br>
+         Facebook | Instagram | Twitter <br> <br>
+           Quick Links: <br><br>
+          About Us | Contact Us | Privacy Policy | Terms of Service <br> <br>
+
+          © 2024 Women Fashion. All rights reserved. <br><br>
+    </section>
+       
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+
+    <script>
+        const scrollContainer = document.getElementById('scrollContainer');
+        const scrollItems = document.querySelectorAll('.scroll-item');
+        let scrollIndex = 0;
+
+        function autoScroll() {
+            const scrollItemWidth = scrollItems[0].clientWidth + 20; // Including margin-right
+            scrollIndex++;
+            if (scrollIndex >= scrollItems.length) {
+                scrollIndex = 0;
+            }
+            scrollContainer.scrollTo({
+                left: scrollIndex * scrollItemWidth,
+                behavior: 'smooth'
+            });
+        }
+
+        setInterval(autoScroll, 6000); // Adjust the speed by changing the interval
+
+
+        function changeImage(category) {
+            const imageElement = document.getElementById('categoryImage');
+            let imagePath = '';
+            
+            switch (category) {
+                case 'saree':
+                    imagePath = './images/saree20.4.webp';
+                    break;
+                case 'kurta':
+                    imagePath = './images/chu15.1.webp';
+                    break;
+                case 'dress':
+                    imagePath = './images/dress1.3.webp';
+                    break;
+                case 'dupatta':
+                    imagePath = './images/chu13.4.webp';
+                    break;
+                default:
+                    imagePath = './images/saree20.4.webp';
+            }
+
+            imageElement.src = imagePath;
+        }
+    </script>
+
+
+   </body>
+</html>

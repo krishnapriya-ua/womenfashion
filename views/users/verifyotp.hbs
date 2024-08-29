@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+      <nav class="navbar navbar-expand-lg navbar-light " id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="./images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px;  width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-item nav-link active" href="/" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                    <a class="nav-item nav-link" href="#" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                    <a class="nav-item nav-link" href="#" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                    <a class="nav-item nav-link" href="#" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+                </div>
+                <div class="d-flex">
+                    <a href="#">
+                        <img src="./images/user (1).png" alt="" style="width: 18px; height: 18px; margin-right:59px;">
+                    </a>
+                    <a href="#">
+                        <img src="./images/shopping-cart.png" alt="" style="width: 20px; height: 20px; margin-right: 29px;">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+<div class="text-center mx-auto" >
+    <form id="verifyotpform "  >
+        <div class="text-center mt-5">
+            <h5 class="mt-5" style="color:#615d5e">VERIFY OTP</h5>
+            <input type="hidden" name="email" id="email" value="{{email}}">
+            <label for="otp" class="mt-5">Please enter the OTP:</label> <br>
+            <input type="text" name="otp" id="otp" required> <br>
+            <button type="button" style="margin-left: 0px;" class="button" id="verifyotp">Verify OTP</button>
+            
+        </div>
+    </form>
+
+
+      <div id="otp-container">
+    <button id="resendOtpBtn" class="button" style="margin-left: 0px;" onclick="resendOtp()">Resend OTP</button>
+    <p id="timer"></p>
+</div>
+   
+</div>
+    <!-- Modal for success and error messages -->
+    <div class="modal fade" id="responseModal" tabindex="-1" aria-labelledby="responseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="responseModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="responseMessage"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#verifyotp').click(function() {
+                const email = $('#email').val();
+                const otp = $('#otp').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/verifyotp',
+                    data: { email, otp },
+                    success: function(response) {
+                        $('#responseModalLabel').text('Success');
+                        $('#responseMessage').text(response.message);
+                        $('#responseModal').modal('show');
+                        if (response.redirect) {
+                            setTimeout(function() {
+                                window.location.href = response.redirect;
+                            }, 2000); // Redirect after 2 seconds
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#responseModalLabel').text('Error');
+                        $('#responseMessage').text(xhr.responseJSON.message);
+                        $('#responseModal').modal('show');
+                    }
+                });
+            });
+
+            $('#resendotp').click(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/resendotp',
+                    success: function(response) {
+                        $('#responseModalLabel').text('Success');
+                        $('#responseMessage').text(response.message);
+                        $('#responseModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        $('#responseModalLabel').text('Error');
+                        $('#responseMessage').text(xhr.responseJSON.message);
+                        $('#responseModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+<script>
+    const cooldownPeriod = 20; // Cooldown period in seconds
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if there's a stored cooldown end time
+        const cooldownEnd = localStorage.getItem('otpCooldownEnd');
+        if (cooldownEnd) {
+            const timeLeft = Math.max(0, Math.ceil((cooldownEnd - Date.now()) / 1000));
+            if (timeLeft > 0) {
+                startCooldown(timeLeft); // Start the countdown if there's remaining time
+            }
+        }
+    });
+
+    function resendOtp() {
+        fetch('/resendotp', {
+            method: 'POST',
+            // Include any necessary body or headers
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                if (data.message.includes('Please wait')) {
+                    // If the response indicates a cooldown, display the message
+                    document.getElementById('timer').textContent = data.message;
+                } else {
+                    alert(data.message); // For other messages
+                    const cooldownEnd = Date.now() + cooldownPeriod * 1000;
+                    localStorage.setItem('otpCooldownEnd', cooldownEnd); // Store the cooldown end time
+                    startCooldown(cooldownPeriod); // Start cooldown on successful OTP request
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function startCooldown(timeLeft) {
+        const resendBtn = document.getElementById('resendOtpBtn');
+        const timerSpan = document.getElementById('timer');
+        resendBtn.disabled = true;
+
+        const interval = setInterval(() => {
+            timeLeft--;
+            timerSpan.textContent = `Please wait ${timeLeft} seconds before requesting a new OTP`;
+
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                resendBtn.disabled = false;
+                timerSpan.textContent = ''; // Clear the timer text when cooldown is over
+                localStorage.removeItem('otpCooldownEnd'); // Clear stored cooldown end time
+            }
+        }, 1000);
+    }
+</script>
+
+
+</body>
+</html>

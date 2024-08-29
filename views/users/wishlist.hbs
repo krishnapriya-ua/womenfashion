@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+    <title>My Orders</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#home">
+            <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px; margin-top:-15px; width: 90px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mx-auto">
+                <a class="nav-item nav-link active" href="/" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                <a class="nav-item nav-link" href="/contact" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+            </div>
+            <div class="d-flex" style="margin-left: 40px;">
+                <a href="/login" class="ml-3">
+                    <img src="/images/user (1).png" calt="" style="width: 18px; height: 18px; margin-right:39px;">
+                </a>
+                <a href="/cart">
+                    <img src="/images/shopping-cart.png" alt="" style="width: 20px; height: 20px; margin-right: 29px;">
+                    <span class="badge" style="background-color: #756f6e;font-size: 8px;margin-left: -28px">{{session.cart.totalQty}}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<br><br><br>
+
+<div class="container mt-5">
+     <h5 class="text-center">Wishlist</h5>
+    {{#if wishlistProducts.length}}
+   
+        <div class="order mb-5">
+             {{#each wishlistProducts}}
+                <div class="row mt-4">
+                    <div class="col-md-2 col-4 mb-4">
+                         <a href="/shop/details/{{this.product._id}}" style="text-decoration: none;">
+                        <img src="/product-images/{{this.images.[0]}}" style="width: 100px; height:auto;"> <br>
+                        </a>
+                    </div>
+                    <div class="col-md-10 col-8 mt-3">
+                        <p style="font-size: smaller; margin-left:-6px">
+                            <strong>{{this.name}}</strong><br>
+                            Amount: Rs. {{this.discountprice}}<br> 
+                            item added on :{{format this.createdAt}}
+                        </p>
+                        <div style="display: flex; flex-direction: row;">
+                         <button class=" button" style=" margin-left:-6px;width: 64px; margin-top:3px;" data-action="remove" data-product-id="{{this._id}}">Remove</button>
+                            <button class=" button" style=" margin-left:16px;width: 90px; margin-top:3px;background-color: #a52a2a8c" data-action="move-to-cart" data-product-id="{{this._id}}">Move to cart</button>
+                       </div>
+                    </div>
+                </div>
+                 <hr>  
+            {{/each}}
+           
+                  
+                    {{else}}
+    <div class="mt-5" style="margin-left: 3px;">
+    <p style="color: #615859; font-size: smaller;" class="mt-5">Your wishlist empty</p>
+    
+    </div>
+                </div>
+                  {{/if}}
+            </div>
+          
+        </div>
+   
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Handle Remove from Wishlist
+    $('button[data-action="remove"]').click(function() {
+        const productId = $(this).data('product-id');
+
+        $.ajax({
+            url: '/shop/wishlist/remove',
+            type: 'POST',
+            data: { productId },
+            success: function(response) {
+                
+               iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                            position: 'topCenter',
+                            timeout: 3000,
+                            icon: 'icon-checkmark',
+                            color: 'green'
+                        });
+                        setTimeout(function() {
+                            window.location.reload()
+                        }, 1700);
+                    },
+                    error: function(xhr, status, error){
+                        iziToast.error({
+                            title: 'Error',
+                            message: xhr.responseText,
+                            position: 'topCenter',
+                            timeout: 3000
+                        });
+                     }
+        
+    })
+    });
+
+    // Handle Move to Cart
+    $('button[data-action="move-to-cart"]').click(function() {
+        const productId = $(this).data('product-id');
+
+        $.ajax({
+            url: '/shop/cart/add',
+            type: 'POST',
+            data: { productId },
+            success: function(response) {
+               iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                            position: 'topCenter',
+                            timeout: 3000,
+                            icon: 'icon-checkmark',
+                            color: 'green'
+                        });
+                        setTimeout(function() {
+                            window.location.href='/cart'
+                        }, 1700);
+                    },
+                    error: function(xhr, status, error){
+                        iziToast.error({
+                            title: 'Error',
+                            message: xhr.responseText,
+                            position: 'center',
+                            timeout: 3000
+                        });
+                     }
+            });
+       });
+  });
+</script>
+
+</body>
+</html>

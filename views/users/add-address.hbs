@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/login.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <title>Address Management</title>
+<style>
+    .form-group{
+        font-size:small
+    }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#home">
+                <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="" style="margin-left: 20px; margin-top:-15px; width: 90px; height: auto;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mx-auto">
+                    <a class="nav-item nav-link active" href="/" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                    <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                    <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                    <a class="nav-item nav-link" href="/contact" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+                </div>
+                 
+                <div class="d-flex" style="margin-left: 40px;">
+                    <a href="/login" class="ml-3">
+                        <img src="/images/user (1).png" alt="" style="width: 18px; height: 18px; margin-right:39px;">
+                    </a>
+                    <a href="/cart">
+                        <img src="/images/shopping-cart.png" alt="" style="width: 20px; height: 20px; margin-right: 29px;">
+                        <span class="badge" style="background-color: #756f6e;font-size: 8px;margin-left: -28px">{{session.cart.totalQty}}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <br><br><br>
+    {{#if user}}
+    <div class="container text-align mx-auto text-center">
+        <h3 class="" style="color: #7B7274; padding-top: 30px; font-weight: 200;">Add a new Address</h3>
+        <a href="/userinfo/{{user._id}}" style="color: #756f6e;">Return to Account details</a>
+        <div class="row mt-5">
+            <div class="col-md-4"></div>
+            <div class="col-md-6" style="margin-left: -43px;">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <form action="/add-address/{{user._id}}" method="POST" id="addAddressForm">
+                            <!-- Form Fields Here -->
+                            <div class="form-group">
+                                 <div class="mb-3" >
+                                <input type="text"style="font-size: small;" class="form-control" id="fullname" name="fullname" placeholder="Full Name" required>
+                                 </div>
+                                 <div class="mb-3">
+                                <input type="tel" style="height: 37px; width: -webkit-fill-available;border-radius: 6px;border: solid 1px #b4aaaaa6;" name="phonenumber" id="phonenumber" placeholder="Phone Number" required>
+                                </div>
+                                 <div class="mb-3">
+                                <input type="text" style="font-size: small;" class="form-control" id="address" name="address" placeholder="Address 1" required>
+                                </div>
+                                <div class="mb-3">
+                                <input type="text" style="font-size: small;" class="form-control" id="city" name="city" placeholder="City" required>
+                                </div>
+                                <div class="mb-3">
+                                    <select class="form-select" style="font-size: small;" id="country" name="country" required>
+                                        <option value="" disabled selected>Country</option>
+                                    </select>
+                                    </div>
+                                     <div class="mb-3">
+                                    <select class="form-select" style="font-size: small;" id="state" name="state" required>
+                                        <option value="" disabled selected>State</option>
+                                    </select>
+                                </div>
+                                <input type="text" style="font-size: small;" class="form-control" id="postcode" name="postcode" placeholder="Postal code" required>
+                            </div>
+                            <button type="submit" class="button">ADD ADDRESS</button>
+                            <hr>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+    <br><br>
+     <section class="footer">
+        Stay Connected: <br><br>
+        Facebook | Instagram | Twitter <br><br>
+        Quick Links: <br><br>
+        About Us | Contact Us | Privacy Policy | Terms of Service <br><br>
+        © 2024 Women Fashion. All rights reserved. <br><br>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const countrySelect = document.getElementById('country');
+            const stateSelect = document.getElementById('state');
+
+            const apiUrl = 'https://api.countrystatecity.in/v1';
+
+            // Function to populate countries
+            async function loadCountries() {
+                try {
+                    const response = await axios.get(`${apiUrl}/countries`, {
+                        headers: {
+                            'X-CSCAPI-KEY': 'dW5mSTJ1QkRsVVRrS1dkd2pmQ0lScU94djd3YlVTM0t6WXk5c3pKcw=='
+                        }
+                    });
+                    console.log('Countries Response:', response); // Debugging
+                    const countries = response.data;
+                    countries.forEach(country => {
+                        const option = document.createElement('option');
+                        option.value = country.iso2;
+                        option.textContent = country.name;
+                        countrySelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching countries:', error);
+                }
+            }
+
+            // Function to populate states based on selected country
+            async function loadStates(countryCode) {
+                try {
+                    const response = await axios.get(`${apiUrl}/countries/${countryCode}/states`, {
+                        headers: {
+                            'X-CSCAPI-KEY': 'dW5mSTJ1QkRsVVRrS1dkd2pmQ0lScU94djd3YlVTM0t6WXk5c3pKcw=='
+                        }
+                    });
+                    console.log('States Response:', response); // Debugging
+                    const states = response.data;
+                    stateSelect.innerHTML = '<option value="" disabled selected>State</option>';
+                    states.forEach(state => {
+                        const option = document.createElement('option');
+                        option.value = state.iso2;
+                        option.textContent = state.name;
+                        stateSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching states:', error);
+                }
+            }
+
+            // Load countries when the page loads
+            loadCountries();
+
+            // Load states when a country is selected
+            countrySelect.addEventListener('change', function() {
+                const selectedCountryCode = countrySelect.value;
+                if (selectedCountryCode) {
+                    loadStates(selectedCountryCode);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+
+    <title>Product Detail</title>
+
+ 
+    <style>
+       .info-container {
+    max-height: 600px; /* Adjust this value as needed */
+    overflow-y: scroll;
+    padding-right: 10px; /* To avoid horizontal scrollbar */
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.info-container::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Optional: just to remove background */
+}
+        
+        .product-detail {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .also{
+            padding-top: 98px;
+        }
+
+        .thumbnails {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+           
+            margin-left: -70px;
+        }
+
+        .thumbnail {
+            width: 34%;
+            height: auto;
+               margin: 5px 0;
+              cursor: pointer;
+           margin-bottom: 17px;
+        }
+
+        .main-image {
+            width: 500px;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .carousel-inner img {
+            width: 100%;
+            height: auto;
+            
+        }
+        .carousel-inner{
+            margin-left: -40px;
+        }
+        .carousel-control-prev{
+            margin-left: -30px;
+            margin-top: -100px;
+        }
+        .carousel-control-next {
+            margin-left: -170px;
+        }
+        .carousel-control-next-icon{
+              margin-left: -78px;
+              margin-top: -78px;
+        }
+
+       
+        .rating i {
+            color:gold;
+            margin-left: 5px;
+        }
+          .breadcrumb {
+        background-color: transparent;
+        padding: 0;
+        margin-top: 10px;
+        color: #6e575c;
+        text-decoration: none;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+    }
+    
+
+        @media (max-width: 768px) {
+            .product-detail {
+                flex-direction: column-reverse;
+              align-items: center;
+              margin-top: -24px;
+            }
+
+            .thumbnails {
+                flex-direction: row;
+                margin: 10px 0;
+            }
+
+            .thumbnail {
+                width: 30%;
+                height: auto;
+                margin: 0 5px;
+            }
+
+            .main-image {
+                width: 100%;
+                height: auto;
+            }
+
+            .col-md-6 {
+                order: 2;
+                margin-top: 113px;
+            }
+
+            .col-md-2 {
+                order: 1;
+                margin-top: -691px;
+                
+            }
+            .mostloved{
+                margin-top: 259px;
+            }
+            .also{
+                padding-top:432px;
+            }
+
+            .col-md-4 {
+                order: 3;
+                text-align: center;
+            }
+            .carousel-inner{
+            margin-left: 0px;
+        }
+            
+        }
+        @media (min-width: 768px){
+            .col-md-6{
+        flex: 0 0 auto;
+        width: 50%;
+        margin-top: -13px;
+        margin-left: -10px;
+        }
+    }
+
+        @media (max-width: 576px) {
+            .thumbnail {
+                width: 10%;
+                height: auto;
+            }
+            
+        }
+
+
+    </style>
+    
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#home">
+            <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt=""
+                 style="margin-left: 20px; margin-top:-15px; width: 90px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mx-auto">
+                <a class="nav-item nav-link active" href="#home"
+                   style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                <a class="nav-item nav-link" href="/contac" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+            </div>
+            <div class="d-flex">
+                <a href="/login">
+                    <img src="/images/user (1).png" alt="" style="width: 18px; height: 18px; margin-right:59px;">
+                </a>
+                <a href="#">
+                    <img src="/images/shopping-cart.png" alt="" style="width: 20px; height: 20px; margin-right: 29px;">
+                </a>
+            </div>
+        </div>
+    </div>
+</nav><br><br><br><br><br>
+
+<section class="container-fluid">
+    <div class="row product-detail">
+        <div class="col-md-2 col-sm-12 thumbnails">
+            {{#each products.images}}
+            <img src="/product-images/{{this}}" alt="Thumbnail {{@index}}" class="img-fluid thumbnail" data-index="{{@index}}">
+            {{/each}}    
+        </div>
+
+        <div class="col-md-4 col-sm-12">
+            <div id="carouselExampleControls" class="carousel slide">
+                <div class="carousel-inner">
+                    <a href="/shop/details/{{products._id}}/detailed">
+                    {{#each products.images}}
+                        <div class="carousel-item {{#if @first}}active{{/if}}" id="main-image">
+                            <img src="/product-images/{{this}}" class="d-block main-image" alt="Main Image {{@index}}">
+                        </div>
+                    {{/each}}
+                    </a>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+            <div class="info-container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a style="text-decoration: none; color: #544f4e;" href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a style="text-decoration: none; color: #544f4e;" href="/shop">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{products.name}}</li>
+                    </ol>
+                </nav>
+                <h5 style="color: #61474de8; margin-top: 60px;">{{products.name}}</h5>
+                <p style="color: red;">-{{products.discountcoupens}}% <a style="color: #544f4e;">(Rs.{{products.discountprice}})</a></p>
+                <p style="color: #61474de8; text-decoration: line-through;">Rs.{{products.price}}</p>
+                <div class="rating" id="rating" data-rating="4.2"></div>
+                <p style="font-size: smaller;">(234 reviews)</p>
+                <p style="color: #61474de8; font-size: smaller;">Tax included.</p>
+                {{#if (lt products.stock 1)}}
+                <p style="color: red; font-size: small;">Out of Stock</p>
+                {{/if}}
+                <p style="color: #61474de8; font-size: 14px;">{{products.description}}</p>
+                <p style="color: #61474de8; line-height: 4px; font-size: smaller;">STYLE</p>
+                <button class="button" style="background-color: #eaeaea; margin-top: 0px; font-size: small; margin-left:0px; color: #6e575c; height: 39px;">{{products.style}}</button>
+                <br><br>
+                <p style="color: #6e575c; line-height: 4px; font-size: smaller;">SIZE</p>
+                <button class="button" style="background-color: #eaeaea; color:#6e575c; height: 39px; margin-left:0px; font-size: small;">{{products.size}}</button>
+                <p style="color: #61474de8; line-height: 50px; margin-top: 9px; font-size: smaller;">ABOUT</p>
+                <p style="color: #61474de8; font-size: 14px; margin-top: -20px; line-height: 23px;">
+                    Category: {{products.category.name}} <br>
+                    Colour: {{products.color}} <br>
+                    Fabric: {{products.fabric}} <br>
+                    Length: {{products.length}} <br>
+                    Care: {{products.care}} <br>
+
+                    {{#if isinwishlist}}
+                    <br>
+                    <a href="/shop/wishlist" style="text-decoration: none;">
+                    <span style="color: rgb(127, 31, 82);font-size: small;font-weight: 600;">----Your wishlist product----</span>
+                    </a>
+                    {{else}}
+      <form id="wishlist-form" action="/shop/wishlist" method="POST">
+    <input type="hidden" name="productId" value="{{products._id}}">
+    <button type="submit" class="button" style="background-color: #eaeaea; font-size: smaller; margin-top: 19px; height: auto; color: #544f4e; margin-left: 0px;">
+        Add to wishlist
+    </button>
+</form>
+{{/if}}
+
+                </p>
+                <button class="button" id="addtocart" style="background-color: #eaeaea; margin-top: 1px; font-size: small; width: 339px; color:#544f4e; margin-left:0px;">
+                    ADD TO CART
+                </button><br>
+                <button class="button" id="buynow" style="background-color: #827071d9; margin-top: 1px; font-size: small; width: 339px; margin-top: 11px; margin-left:0px;">
+                    BUY NOW
+                </button><br>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<section class="container-fluid mostloved">
+    <h4 style="color: #796e74; font-weight: 300; text-align: center;" class="also">YOU MAY ALSO LIKE<hr></h4> <br>
+    <div class="row">
+        <!-- Related products will be injected here -->
+    </div>
+    <br><br><br>
+</section>
+
+        <section class="footer">
+    Stay Connected: <br><br>
+    Facebook | Instagram | Twitter <br><br>
+    Quick Links: <br><br>
+    About Us | Contact Us | Privacy Policy | Terms of Service <br><br>
+    © 2024 Women Fashion. All rights reserved. <br><br>
+</section>
+
+
+
+   <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+ <script>
+        $(document).ready(function () {
+            const rating = $('#rating').data('rating'); 
+            const total=5;
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 !== 0;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+            let starsHtml = '';
+
+           
+            for (let i = 0; i < fullStars; i++) {
+                starsHtml += '<i class="fa fa-star"></i>';
+            }
+
+            
+            if (halfStar) {
+                starsHtml += '<i class="fa fa-star-half-alt"></i>';
+            }
+
+           
+            for (let i = 0; i < emptyStars; i++) {
+                starsHtml += '<i class="fa fa-star-o"></i>';
+            }
+
+            $('#rating').html(starsHtml);
+        });
+    </script>
+
+
+
+<script>
+$(document).ready(function () {
+    $('#carouselExampleControls').carousel({
+        interval: false
+    });
+
+    $('.thumbnail').click(function () {
+        var index = $(this).data('index');
+        $('#carouselExampleControls').carousel(index);
+    });
+
+    $('#addtocart').click(function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: 'POST',
+            url: `/add-to-cart/{{products._id}}`,
+            success: function(response) {
+                iziToast.success({
+                            title: 'Success',
+                            message: response.message,
+                            position: 'topCenter',
+                            timeout: 3000,
+                            icon: 'icon-checkmark',
+                            color: 'green'
+                        });
+                        setTimeout(function() {
+                            window.location.href='/cart'
+                        }, 1700); // Redirect after toast disappears
+                    },
+                    error: function(xhr, status, error){
+                        iziToast.error({
+                            title: 'Error',
+                            message: xhr.responseText,
+                            position: 'center',
+                            timeout: 3000
+                        });
+                    }
+        });
+    });
+
+    // Ensure this script is on the product details page
+      $('#buynow').click(function(e) {
+    e.preventDefault();
+
+    const productId = '{{products._id}}'; // Ensure this is correctly rendered
+
+    $.ajax({
+        type: 'POST',
+        url: `/buy-now/${productId}`,
+        success: function(response) {
+            // Redirect to checkout
+            window.location.href = '/buynow';
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+        }
+    });
+});
+      
+
+       $('#wishlist-form').on('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const form = $(this);
+        const formData = form.serialize(); // Serialize form data
+
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: formData,
+            success: function(response) {
+                iziToast.success({
+                    title: 'Success',
+                    message: response.message,
+                    position: 'topCenter',
+                    timeout: 3000
+                });
+                 setTimeout(function() {
+            window.location.reload()
+          }, 1700);
+               
+            },
+            error: function(xhr) {
+                iziToast.error({
+                    title: 'Error',
+                    message: xhr.responseJSON.message,
+                    position: 'topCenter',
+                    timeout: 3000
+                });
+            }
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const productId = '{{products._id}}'; // Dynamic product ID
+
+        fetch(`/shop/relatedproducts/${productId}`)
+            .then(response => response.json())
+            .then(products => {
+                const container = document.querySelector('.mostloved .row');
+                container.innerHTML = ''; 
+
+                products.forEach(product => {
+                    const imagePath=product.images[0]
+                    const productHtml = `
+                        <div class="col-md-3 col-sm-3 col-6">
+                         <a href="/shop/details/${product._id}" style="text-decoration: none; color: #72696e;">
+                            <img src="/product-images/${imagePath}" alt="${product.name}" class="img-fluid">
+                                   <p style="line-height: 28px;">${product.name}<br>Rs.${product.price}</p>
+                            </a>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', productHtml);
+                });
+            })
+            .catch(error => console.error('Error fetching related products:', error));
+    });
+</script>
+</body>
+</html>

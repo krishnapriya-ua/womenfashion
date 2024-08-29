@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/login.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+      <title>Cart Page</title>
+    <style>
+        #nav {
+            background-color: transparent;
+        }
+        .position-relative {
+            position: relative;
+        }
+        .toast {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            max-width: 700px; /* Adjust the max-width as needed */
+            width: 400px; /* Full width within the max-width */
+            margin: 0 auto; /* Center the toast horizontally */
+        }
+        .toast-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .toast-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        #toastContainer {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%); /* Center horizontally */
+            z-index: 1050;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light" id="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="Logo" style="margin-left: 20px; width: 90px; height: auto;">
+        </a>
+        <div class="d-flex">
+            <a href="/cart">
+                <img src="/images/shopping-cart.png" alt="Cart" style="width: 20px; height: 20px; margin-right: 29px;">
+            </a>
+        </div>
+    </div>
+</nav>
+<hr>
+<br>
+
+<!-- Toast Container -->
+<div id="toastContainer" aria-live="polite" aria-atomic="true">
+    <!-- Toasts will be dynamically inserted here -->
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6" style="margin-left: 0px;">
+            <p style="color: #6e5857; margin-top: 22px;">Account</p>
+            <p style="color: #6e5857;margin-top: -8px;">{{user.email}} <hr></p>
+            <p style="color: #6e5857;font-weight: 600; ">Delivery</p>
+         {{#if primaryAddress}}
+            <div class="address-section ">
+                  <input type="hidden" name="addressId" id="addressId" value="{{primaryAddress._id}}">
+                <p>{{primaryAddress.fullname}}<br>
+                <p>{{primaryAddress.fullname}}<br>
+                {{primaryAddress.address}}, <br> {{primaryAddress.city}}, <br> {{primaryAddress.state}}, {{primaryAddress.country}}, <br>{{primaryAddress.postcode}}<br>
+                Phone: {{primaryAddress.phonenumber}}
+                </p>
+                <a href="/address-management/{{user._id}}" style="color: #6e5857;"> change?</a>
+            </div>
+         {{else}}
+            <p>No primary address set. Please <a href="/address-management/{{user._id}}" style="color: #6e5857;"> <br>add or set a primary address</a>.</p>
+         {{/if}} 
+         <hr>
+            <p style="color: #6e5857;font-weight: 600;margin-top: 31px; ">Payment Methods</p>
+            <p style="color: #6e5857;margin-top: -8px;">All transactions are secured and encrypted</p>
+           
+             <div class="form-check">
+                 
+                <input class="form-check-input" type="radio" name="paymentMethod" id="wallet" value="wallet">
+                
+                <label class="form-check-label" for="wallet">Use Wallet</label><br> 
+                <p>Wallet Balance: {{user.walletBalance}}</p>
+               
+            </div>
+          
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="cod" value="COD">
+                <label class="form-check-label" for="cod">Cash on Delivery</label><br><br>
+            </div>
+             <div class="form-check">
+                 <input class="form-check-input" type="radio">
+              
+              <button id="razorpay-button" class="button" style="width: fit-content;background-color: #1773b0;margin-left: 0px;margin-top: 0px;" name="paymentMethod" value="razorpay" onclick="initiateRazorpayPayment()">Pay with Razorpay</button>
+        </div>
+                </div>
+
+        <div class="col-md-6" style="background-color: #eaeaeacf; margin-top: 31px; margin-left: 0px; height: 800px; display: flex; flex-direction: column;">
+            {{#if totalQty}}
+            {{#each products}}
+            <div class="d-flex align-items-start mt-4 position-relative">
+                <img src="/product-images/{{this.images.[0]}}" style="width: 15%; height: auto;">
+                <span class="badge text-white badge-position" style="background-color: #757171; border-radius: 58px; font-size: x-small;">{{this.quantity}}</span>
+                <p style="color: #6e5857; margin-top: 39px; margin-left: 21px;">{{this.name}} <br> Rs. {{this.discountprice}}</p>
+            </div>
+            {{/each}}
+
+
+
+
+ <form id="checkoutForm"> <br>
+    
+    <input type="text" id="couponCode" name="couponCode" placeholder="Enter coupon code" /> <br>
+    <button type="submit" class="button" style="margin-left: 0px;">Apply Coupon</button>
+</form>
+
+
+
+<div class="mt-3">
+    <p style="color: #6e5857;">Subtotal <span class="float-end">Rs. <span id="subtotal">{{totalPrice}}</span></span></p>
+    <p style="color: #6e5857;">Coupon applied <span class="float-end" id="coupon-amount">Rs.0</span></p>
+    <p style="color: #6e5857;">Delivery charge <span class="float-end">Rs.40</span></p>
+    <p style="color: #6e5857; font-weight: 500;">Total <span class="float-end">INR <span id="total-amount-display">{{add totalPrice 40}}</span></span></p>
+</div>
+            {{/if}}
+               <button style="width:auto; height: 45px; background-color: #1773b0; border: 1px solid; border-color: #1773b0; color: white;margin-top: 33px;" id="paynow">PAY NOW</button>
+    
+        </div>
+        
+    </div>
+    
+</div>
+
+<br><br>
+<section class="footer">
+    Stay Connected: <br><br>
+    Facebook | Instagram | Twitter <br><br>
+    Quick Links: <br><br>
+    About Us | Contact Us | Privacy Policy | Terms of Service <br><br>
+    © 2024 Women Fashion. All rights reserved. <br><br>
+</section>
+ <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2s5dyh7W1fggtde7Fq6T0pCzG/D4IWlTV4D/R4evzB+BfjWszC6I1QhN9i0" crossorigin="anonymous"></script>
+ 
+
+
+
+
+<script>
+    let iscouponapplied=false
+  document.getElementById('checkoutForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    if(iscouponapplied){
+         iziToast.error({ title: 'Error', message: 'Coupon has already been applied.', position: 'topCenter' });
+        return;
+    }
+    const couponCode = document.getElementById('couponCode').value;
+    const totalPrice = parseFloat(document.getElementById('total-amount-display').textContent);
+
+    try {
+        const response = await fetch('/pay-now/apply-coupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ couponCode, totalPrice }),
+        });
+
+        const data = await response.json();
+        if(totalPrice<3000){
+             iziToast.error({ title: 'Error', message: 'coupon cannot applied on products less than 3000 rs.',position:'topCenter' });
+     
+        }
+        else{
+        if (response.ok) {
+             document.getElementById('coupon-amount').textContent = `-Rs.${data.discountAmount}`;
+      
+            document.getElementById('total-amount-display').textContent = data.newTotalAmount;
+            iscouponapplied=true
+            iziToast.success({ title: 'Success', message: 'Coupon applied successfully!',position:'topCenter' });
+        } else {
+            iziToast.error({ title: 'Error', message: data.message });
+        }
+        }
+    } catch (error) {
+        console.error('Error applying coupon:', error);
+        iziToast.error({ title: 'Error', message: 'Error applying coupon' });
+    }
+  });
+  </script>
+
+
+  <script>
+document.getElementById('razorpay-button').onclick = function(e) {
+    e.preventDefault();
+
+    const addressId = $('input[name="addressId"]').val(); // Fetch the address ID
+      const totalPrice = parseFloat(document.getElementById('total-amount-display').textContent);
+// Ensure this is correctly rendered in your HTML
+
+    fetch('/pay-now', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            paymentMethod: 'razorpay',
+            addressId: addressId,
+            totalPrice: totalPrice,
+            
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.orderId) {
+            var options = {
+                key: data.key, // Your Razorpay key
+                amount: data.amount, // Amount in paise
+                currency: data.currency,
+                name: 'WOMEN FASHION',
+                description: 'Order Payment',
+                order_id: data.orderId,
+                handler: function(response) {
+                    fetch('/verify-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            paymentId: response.razorpay_payment_id,
+                            orderId: response.razorpay_order_id,
+                            razorpaySignature: response.razorpay_signature,
+                            addressId: addressId,
+                            totalPrice: totalPrice
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.message === 'Order placed successfully') {
+                            iziToast.success({
+                                title: 'Success',
+                                message: 'Payment successful!',
+                                position: 'topCenter'
+                            });
+                            setTimeout(function() {
+                                window.location.href='/order-now';
+                            }, 1700);
+                        } else {
+                            iziToast.error({
+                                title: 'Error',
+                                message: 'Payment verification failed',
+                                position: 'topCenter'
+                            });
+                           setTimeout(function() {
+                                window.location.href='/view-orders';
+                            }, 1700);
+                        }
+                    })
+                    .catch(error => {
+                        iziToast.error({
+                            title: 'Error',
+                            message: 'An error occurred during payment verification',
+                            position: 'topRight'
+                        });
+                        setTimeout(function() {
+                                window.location.href='/view-orders';
+                            }, 1700);   
+                              });
+                },
+                prefill: {
+                    name: 'Customer Name',
+                    email: 'customer@example.com',
+                    contact: '9999999999'
+                },
+                theme: {
+                    color: '#3399cc'
+                },
+                  modal: {
+        ondismiss: function() {
+            window.location.href = '/view-orders';
+            status='payment failed'
+        }
+    }
+            };
+            var rzp = new Razorpay(options);
+
+rzp.on('payment.failed', function(response){
+    iziToast.error({
+        title: 'Payment Failed',
+        message: 'The payment failed. Please try again.',
+        position: 'topCenter'
+    });
+    setTimeout(function() {
+        window.location.href='/order-now';
+    }, 1700);
+});
+            rzp.open();
+        } else {
+            iziToast.error({
+                title: 'Error',
+                message: 'Order ID not returned',
+                position: 'topCenter'
+            });
+        }
+    })
+    .catch(error => {
+        iziToast.error({
+            title: 'Error',
+            message: 'An error occurred during payment initiation',
+            position: 'topRight'
+        });
+    });
+};
+
+
+  </script>
+
+
+
+<script>
+$(document).ready(function() {
+    $('#paynow').click(function(e) {
+        e.preventDefault();
+
+        const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+        const addressId = $('input[name="addressId"]').val();
+        const walletBalance = {{user.walletBalance}}; // Ensure this is correctly rendered
+        const totalPrice = {{totalPrice}};
+        const couponCode=$('#couponCode').val() // Ensure this is correctly rendered
+
+        if (!paymentMethod) {
+            iziToast.error({
+                title: 'Error',
+                message: 'Please select a payment method',
+                position: 'topCenter',
+                timeout: 3000
+            });
+            return;
+        }
+
+        if (!addressId) {
+            iziToast.error({
+                title: 'Error',
+                message: 'Please select a delivery address',
+                position: 'topCenter',
+                timeout: 3000
+            });
+            return;
+        }
+
+        if(paymentMethod==='COD' && totalPrice>1000){
+            iziToast.error({
+                title:'Sorry ',
+                message:'Cash on delivery is not applicable to product above Rs.1000',
+                position:'topCenter',
+                timeout:2000
+            });
+            return
+        }
+
+       
+
+        // Proceed with the payment process
+        $.ajax({
+            type: 'POST',
+            url: '/pay-now',
+            data: { paymentMethod, addressId, walletBalance, totalPrice,couponCode:couponCode.value },
+             // Include walletBalance and totalPrice
+            success: function(response) {
+                iziToast.success({
+                    title: 'Success',
+                    message: response.message,
+                    position: 'topCenter',
+                    timeout: 3000,
+                    icon: 'icon-checkmark',
+                    color: 'green'
+                });
+                setTimeout(function() {
+                    window.location.href = '/order-now';
+                }, 1700);
+            },
+            error: function(xhr, status, error) {
+                iziToast.error({
+                    title: 'Error',
+                    message: xhr.responseText,
+                    position: 'topCenter',
+                    timeout: 3000
+                });
+            }
+        });
+    });
+});
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

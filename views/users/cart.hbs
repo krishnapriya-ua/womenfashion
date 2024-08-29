@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Cart Page</title>
+    <style>
+        .btn {
+            background-color: transparent;
+            color: #786f70;
+            font-weight: 700;
+            border: transparent;
+        }
+        .btn-secondary {
+            --bs-btn-hover-bg: #a69d9d;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light" id="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img src="/images/Screenshot_2024-07-14_091114-removebg-preview.png" alt="Logo" style="margin-left: 20px; width: 90px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mx-auto">
+                <a class="nav-item nav-link active" href="/" style="padding-left: 70px;font-weight: 100; font-size: small;">HOME</a>
+                <a class="nav-item nav-link" href="/shop" style="padding-left: 78px;font-weight: 100;font-size: small;">SHOP</a>
+                <a class="nav-item nav-link" href="/about" style="padding-left: 78px;font-weight: 100;font-size: small;">ABOUT</a>
+                <a class="nav-item nav-link" href="/contact" style="padding-left: 78px;font-weight: 100;font-size: small;">CONTACT</a>
+            </div>
+            {{#if users}}
+            <p>{{this.username}}</p>
+            {{/if}}
+            <div class="d-flex">
+                <a href="#">
+                   
+                    <img src="/images/user (1).png" alt="User" style="width: 18px; height: 18px; margin-right:59px;">
+                </a>
+                <a href="#">
+                    <img src="/images/shopping-cart.png" alt="Cart" style="width: 20px; height: 20px; margin-right: 29px;">
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<br><br>
+<h4 style="color: #6e5857; margin-top: 22px; margin-left: 23px;">CART  <hr> </h4><br>
+<section>
+    {{#if cart.totalQty}}
+    <div class="container-fluid">
+        {{#each cart.items}}
+        <div class="row align-items-center mb-1">
+            <div class="col-md-2 col-sm-4 col-4 text-center">
+                {{#if this.product.images.length}}
+                <a href="/shop/details/{{this.product._id}}" style="text-decoration: none;">
+                    <img src="/product-images/{{this.product.images.[0]}}" alt="{{this.product.name}}" class="img-fluid" style="width: 130px;height:auto">
+                </a>
+                {{/if}}
+            </div>
+            <div class="col-md-6 col-sm-8 col-8">
+                <p style="color: #61474de8;margin-bottom: 5px;margin-top: 12px;">{{this.product.name}}</p>
+                <p style="color: #61474de8;font-size: smaller;margin-bottom: 5px;">STYLE: {{this.product.style}}</p>
+                <p style="color: #61474de8;font-size: smaller;margin-bottom: 5px;">SIZE: {{this.product.size}}</p>
+                <p style="color: #61474de8;margin-bottom: 5px;">Rs.{{this.product.discountprice}}</p>
+                <p style="color: #61474de8;font-size: smaller;text-decoration: line-through;margin-bottom: 5px;">MRP: Rs.{{this.product.price}}</p>
+                {{#if (eq this.product.stock 0)}}
+                <p style="color: red; font-size: small;">Out of Stock</p>
+                {{/if}}
+
+                
+                <div style="border: 1px solid #7e7b7e;width: fit-content;">
+                    <button class="btn btn-secondary btn-sm" data-action="decrease" data-product-id="{{this.product._id}}">-</button>
+                    <span style="font-size: smaller;color: #615859;padding-top: 1px" class="quantity">{{this.quantity}}</span>
+                    <button class="btn btn-secondary btn-sm" data-action="increase" data-product-id="{{this.product._id}}">+</button><br>
+                     
+                </div>
+                 <button class=" button" style="margin-left: 0px;width: 64px;margin-top:3px;height:auto" data-action="remove" data-product-id="{{this.product._id}}">Remove</button>
+               
+            
+            </div>
+             
+            <hr style="margin-top: 15px;">
+        </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <div style="margin-left: 33px;">
+    <p style="color: #615859; font-size: smaller;">YOUR CART IS EMPTY</p>
+    <button style="border: 1px solid #615859;
+    width: max-content;
+    height: 40px;
+    font-size: smaller"><a href="/shop" style="text-decoration: none;color:#615859">RETURN TO SHOP</a></button>
+    </div>
+    {{/if}}
+</section>
+<br> <section >
+    {{#if cart.items.length}}
+    
+    <div class="row">
+        <div class="col-md-8 col-sm-6" style="margin-left: -22px;"></div>
+        <div class="col-md-4 col-sm-6" style="margin-left: 11px;" >
+
+            <p style="color: #61474de8;font-size: smaller;">TOTAL PRICE ( {{cart.totalQty}} ) :<span id="actualprice">{{cart.actualprice}}</p>
+             <p style="color: green;font-size: small;font-weight:500">Discount price: Rs. -{{discountAmount}}</p>
+            
+            <p style="color: #61474de8; font-size: smaller;">DISCOUNTED PRICE: Rs.<span id="totalPrice">{{cart.totalPrice}}</span></p>
+            <section>
+    {{#if cart.items.length}}
+        {{#unless hasOutOfStock}}
+            <button class="button" style="margin-top: 0px;margin-left: 0px;">
+                <a href="/buynow" style="text-decoration: none;color:white;">BUY NOW</a>
+            </button>
+        {{else}}
+            <p style="font-size: small; color:rebeccapurple">Please remove the  product which is out of stock</p>
+        {{/unless}}
+    {{/if}}
+</section>
+
+        </div>
+    </div>
+    {{/if}}
+</section>
+
+
+<br><br><br><br><br>
+<section class="footer">
+    Stay Connected: <br><br>
+    Facebook | Instagram | Twitter <br><br>
+    Quick Links: <br><br>
+    About Us | Contact Us | Privacy Policy | Terms of Service <br><br>
+    © 2024 Women Fashion. All rights reserved. <br><br>
+</section>
+
+<script>
+    $(document).ready(function() {
+        $('button[data-action="increase"]').click(function() {
+            const productId = $(this).data('product-id');
+            $.post(`/add-to-cart/increase/${productId}`, function(response) {
+                location.reload(); // Reload the page to update cart
+            }).fail(function(jqXHR) {
+                    alert(jqXHR.responseJSON.message || 'Error increasing quantity');
+                });
+        });
+
+        $('button[data-action="decrease"]').click(function() {
+            const productId = $(this).data('product-id');
+            $.post(`/add-to-cart/decrease/${productId}`, function(response) {
+                location.reload(); // Reload the page to update cart
+            }).fail(function() {
+                alert('Error decreasing quantity');
+            });
+        });
+
+        $('.button[data-action="remove"]').click(function() {
+            const productId = $(this).data('product-id');
+
+            $.ajax({
+                url: '/add-to-cart/remove/' + productId,
+                method: 'POST',
+                success: function(response) {
+                    // Reload the page to reflect changes
+                    location.reload();
+                },
+                error: function(error) {
+                    console.error('Error removing product:', error);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
