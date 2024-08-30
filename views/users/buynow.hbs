@@ -336,7 +336,8 @@ $(document).ready(function() {
         const paymentMethod = $('input[name="paymentMethod"]:checked').val();
         const addressId = $('input[name="addressId"]').val();
         const walletBalance = {{user.walletBalance}}; // Ensure this is correctly rendered
-        const totalPrice = {{totalPrice}};
+         const totalPrice = parseFloat(document.getElementById('total-amount-display').textContent);
+
         const couponCode=$('#couponCode').val() // Ensure this is correctly rendered
 
         if (!paymentMethod) {
