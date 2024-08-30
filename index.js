@@ -2,11 +2,21 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const mongoose = require('mongoose');
-const connect = mongoose.connect('mongodb://localhost:27017/womenfashion');
+
 const exhbs=require('express-handlebars')
 const passport=require('passport')
 const moment=require('moment')
 
+require('dotenv').config();
+require('./helpers/passport-setup')
+
+const connect = mongoose.connect(process.env.MONGO_URL);
+
+connect.then(() => {
+    console.log('db connected');
+}).catch(() => {
+    console.log('db not connected');
+});
 const hbs = exhbs.create({
     extname: 'hbs',
     helpers: {
@@ -46,14 +56,6 @@ const hbs = exhbs.create({
     }
 });
 
-connect.then(() => {
-    console.log('db connected');
-}).catch(() => {
-    console.log('db not connected');
-});
-
-require('dotenv').config();
-require('./helpers/passport-setup')
 
 const app = express();
 
