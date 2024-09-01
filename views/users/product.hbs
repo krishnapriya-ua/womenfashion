@@ -230,25 +230,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+vIdidONjY8si1p00T9P1gXoE4J92" crossorigin="anonymous"></script>
-  <script>
-    document.getElementById('applyFiltersBtn').addEventListener('click', () => {
-    let categories = [];
-    document.querySelectorAll('input[name="categories"]:checked').forEach((checkbox) => {
-        categories.push(checkbox.value);
-    });
-
-    let minPrice = document.getElementById('priceRange').value;
-    let maxPrice = document.getElementById('priceRange').max;
-
-    // Construct the query string
-    let queryString = `?categories=${categories.join(',')}&minPrice=${minPrice}&maxPrice=${maxPrice}`;
-
-    // Redirect to the filtered results
-    window.location.href = `/shop${queryString}`;
-});
-  </script>
-  
-  
+ 
   <script>
     $(document).ready(function () {
         $('#searchIcon').click(function () {
@@ -304,11 +286,7 @@
                 });
             }
         });
-    });
-</script>
-<script>
-    $(document).ready(function () {
-                $('#openFilterPanelBtn').click(function () {
+          $('#openFilterPanelBtn').click(function () {
                 $('#filterPanel').toggle(); // Toggle the visibility of the filter panel
             });
 
@@ -321,74 +299,33 @@
             $('#filterPanel input').on('change', function () {
                 performSearch();
             });
-
-            function performSearch() {
-                var categories = $('#filterPanel #categoryFilter input:checked').map(function() { return this.value; }).get();
-                var colors = $('#filterPanel #colorFilter input:checked').map(function() { return this.value; }).get();
-                var fabrics = $('#filterPanel #fabricFilter input:checked').map(function() { return this.value; }).get();
-                var priceRange = $('#priceRange').val();
-
-            var sortType = $('#sortDropdown .dropdown-item.active').data('sort'); // Get selected sort type
-
-                $.ajax({
-                    url: '/shop/search',
-                    type: 'GET',
-                    data: {
-                        categories: categories,
-                        colors: colors,
-                        fabrics: fabrics,
-                        priceRange: priceRange,
-                        sort:sortType
-                    },
-                    success: function (data) {
-                        if (data.products.length === 0) {
-                            $('#resultsContainer').hide();
-                            $('#noResultsMessage').show();
-                        } else {
-                            $('#noResultsMessage').hide();
-                            var html = '<div class="row m-2">';
-                            data.products.forEach(function (product) {
-                                html += '<div class="col-md-3 col-sm-3 col-6 product-item">';
-                                html += '<a href="/shop/details/' + product._id + '" style="text-decoration: none;">';
-                                html += '<img src="/product-images/' + product.images[0] + '" alt="" class="img-fluid">';
-                                html += '<p style="line-height: 28px; text-decoration: none; color: #72696e;">' + product.name + '<br>Rs.' + product.price + '</p><br><br>';
-                                html += '</a></div>';
-                            });
-                            html += '</div>';
-                            $('#resultsContainer').html(html).show();
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Error:', error);
-                    }
-                });
-            }
-
-        function sortProducts(type) {
-            var products = $('.product-item'); // Assuming .product-item is the class for product divs
-            products.sort(function (a, b) {
-                var textA = $(a).find('p').text().trim().toUpperCase();
-                var textB = $(b).find('p').text().trim().toUpperCase();
-                var priceA = parseFloat($(a).find('.price').text().replace('Rs.', ''));
-                var priceB = parseFloat($(b).find('.price').text().replace('Rs.', ''));
-
-                if (type === 'az') {
-                    return textA.localeCompare(textB);
-                } else if (type === 'za') {
-                    return textB.localeCompare(textA);
-                } else if (type === 'priceLowHigh') {
-                    return priceA - priceB;
-                } else if (type === 'priceHighLow') {
-                    return priceB - priceA;
-                }
-            });
-
-            $('.products-container').html(products); // Assuming .products-container is the class for the container of product divs
-        }
-
-          
     });
 </script>
+
+ 
+  <script>
+    document.getElementById('applyFiltersBtn').addEventListener('click', () => {
+    let categories = [];
+    document.querySelectorAll('input[name="categories"]:checked').forEach((checkbox) => {
+        categories.push(checkbox.value);
+    });
+
+    let minPrice = document.getElementById('priceRange').value;
+    let maxPrice = document.getElementById('priceRange').max;
+    let searchQuery=document.getElementById('searchQuery').value;
+    
+
+    // Construct the query string
+    let queryString = `?categories=${categories.join(',')}&minPrice=${minPrice}&maxPrice=${maxPrice}&q=${searchQuery}`;
+    if(searchQuery){
+        queryString+=`&q${searchQuery}`
+    }
+    // Redirect to the filtered results
+    window.location.href = `/shop${queryString}`;
+});
+  </script>
+  
+  
 
 </body>
 </html>
