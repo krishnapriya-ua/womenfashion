@@ -154,6 +154,9 @@
         var input=document.querySelector("#phonenumber")
         var iti=window.intlTelInput(input,{
             initialCountry:'IN',
+              autoHideDialCode: false,
+        nationalMode: false, // Show the full phone number including the country code
+        
             geoIpLookup:function(callback){
                 fetch("https://ipinfo.io/json?token=YOUR_ACCESS_TOKEN")
                 .then(response=>response.json)
@@ -175,6 +178,7 @@
         document.querySelector("#signupform").addEventListener('submit',function(event){
            if(!iti.isValidNumber()){
             event.preventDefault()
+              
            
            }
         })
