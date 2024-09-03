@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     let filterOptions = {};
     let selectedCategories = req.query.categories ? req.query.categories.split(',') : [];
     let minPrice = req.query.minPrice || 500;
-    let maxPrice = req.query.maxPrice || 100000;
+    let maxPrice = req.query.maxPrice || 8000;
     let searchQuery = req.query.q;
 
     // Handling sort options
@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 
     // Handling price range filter
     if (minPrice && maxPrice) {
-        filterOptions.price = { $gte: minPrice, $lte: maxPrice };
+        filterOptions.discountprice = { $gte: minPrice, $lte: maxPrice };
     }
 
     // Handling search query only within the selected categories

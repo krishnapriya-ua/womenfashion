@@ -13,15 +13,15 @@
             color: #887374;
             font-size: small;
         }
-        #searchBar {
+         #searchBar {
             display: none;
-            position: absolute; /* Changed from margin to position */
-            top: 60px; /* Adjust as needed */
-            right: 20px; /* Adjust as needed */
+            position: absolute;
+            top: 60px;
+            right: 20px;
             background: white;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             width: 322px;
         }
@@ -108,9 +108,9 @@
         </div>
     </nav> <br>
 
-    <div id="searchBar" class="mt-5">
+   <div id="searchBar" class="mt-5">
         <input type="text" style="height: 30px;border: 1px solid #988687;" id="searchQuery" placeholder="Search...">
-         <span id="feedbackMessage"></span> 
+        <span id="feedbackMessage"></span>
         <button class="button" style="height: 32px; background-color: #887374db;margin-left: 0px;" id="searchButton">Search</button>
     </div>
 
@@ -123,12 +123,13 @@
 
 
        <!-- Filter Panel -->
-<div class="col-md-3" style="margin-top: -71px; margin-left: 11px;">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="openFilterPanelBtn"
-            style="background-color: #887374; border-color: white; border-radius: 0px; width: 79px; font-weight: 100; height: 41px; font-size: smaller;" aria-expanded="false">
-        FILTER
-    </button>
-    <div id="filterPanel">
+ <div class="col-md-3" style="margin-top: -71px; margin-left: 11px;">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="openFilterPanelBtn"
+                        style="background-color: #887374; border-color: white; border-radius: 0px; width: 79px; font-weight: 100; height: 41px; font-size: smaller;"
+                        aria-expanded="false">
+                        FILTER
+                    </button>
+                    <div id="filterPanel">
         <!-- Category Filter -->
         <div class="filter-section">
             <h5>Category</h5>
@@ -159,173 +160,174 @@
 </div>
 
 
-        <div class="" style="margin-top: -71px; margin-left: 95px;">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
-                        style="background-color: transparent; border-color: white; height: 41px; font-weight: 400; font-size: smaller; color: #887374; border: 1px solid black; width: 153px; border-radius: 0px;" data-bs-toggle="dropdown" aria-expanded="false">
-                    SORT BY
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-                    <li><a class="dropdown-item" href="/shop?sort=az">Alphabet A-Z</a></li>
-                    <li><a class="dropdown-item" href="/shop?sort=za">Alphabet Z-A</a></li>
-                    <li><a class="dropdown-item" href="/shop?sort=priceLowHigh">Price Low to High</a></li>
-                    <li><a class="dropdown-item" href="/shop?sort=priceHighLow">Price High to Low</a></li>
-                    <li><a class="dropdown-item" href="/shop?sort=featured">Featured</a></li>
-                    <li><a class="dropdown-item" href="/shop?sort=popularity">Popularity</a></li>
-                    <li><a class="dropdown-item" href="/shop?sort=newArrivals">New Arrivals</a></li>
-                </ul>
-            </div>
-        </div>
+      <div class="" style="margin-top: -71px; margin-left: 95px;">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="sortDropdown"
+                style="background-color: transparent; border-color: white; height: 41px; font-weight: 400; font-size: smaller; color: #887374; border: 1px solid black; width: 153px; border-radius: 0px;" data-bs-toggle="dropdown" aria-expanded="false">
+            SORT BY
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+            <li><a class="dropdown-item sort-option" data-sort="az">Alphabet A-Z</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="za">Alphabet Z-A</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="priceLowHigh">Price Low to High</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="priceHighLow">Price High to Low</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="featured">Featured</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="popularity">Popularity</a></li>
+            <li><a class="dropdown-item sort-option" data-sort="newArrivals">New Arrivals</a></li>
+        </ul>
     </div>
 </div>
 
-
 <div class="results-container" id="resultsContainer">
-         
-        </div>
-        <div id="noResultsMessage" style="display: none; color: #72696e; margin-left: 15px;">
+    <!-- Products will be displayed here -->
+</div>
+<div id="noResultsMessage" style="display: none; color: #72696e; margin-left: 15px;">
     No results found for your query.
 </div>
 
-<div class="row " id="productList">
+<div class="row" id="productList">
     {{#if products.length}}
-  {{#each products}}
-  <div class="col-md-3 col-sm-3 col-6 product-item">
-    <a href="/shop/details/{{this._id}}" style="text-decoration: none;">
-      <img src="/product-images/{{this.images.[0]}}" alt="" class="img-fluid">
-      <p style="line-height: 28px; text-decoration: none; color: #72696e;">{{this.name}}<br>Rs.{{this.discountprice}}</p>
-    </a>
-  </div>
-  {{/each}} 
-   {{else}}
-        <p>No products found matching your criteria.</p>
+    {{#each products}}
+    <div class="col-md-3 col-sm-3 col-6 product-item">
+        <a href="/shop/details/{{this._id}}" style="text-decoration: none;">
+            <img src="/product-images/{{this.images.[0]}}" alt="" class="img-fluid">
+            <p style="line-height: 28px; text-decoration: none; color: #72696e;">{{this.name}}<br>Rs.{{this.discountprice}}</p>
+        </a>
+    </div>
+    {{/each}}
+    {{else}}
+    <p>No products found matching your criteria.</p>
     {{/if}}
-  
-
-  
 </div>
 
-       
+<br><hr>
 
-
-<br> <hr>
-
-
+<section class="footer">
+    Stay Connected: <br><br>
+    Facebook | Instagram | Twitter <br><br>
+    Quick Links: <br><br>
+    About Us | Contact Us | Privacy Policy | Terms of Service <br><br>
+    © 2024 Women Fashion. All rights reserved. <br><br>
 </section>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+vIdidONjY8si1p00T9P1gXoE4J92" crossorigin="anonymous"></script>
 
-    
-
-
-    <section class="footer" >
-        Stay Connected: <br><br>
-         Facebook | Instagram | Twitter <br> <br>
-           Quick Links: <br><br>
-          About Us | Contact Us | Privacy Policy | Terms of Service <br> <br>
-
-          © 2024 Women Fashion. All rights reserved. <br><br>
-    </section>
-       
+<script>
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+vIdidONjY8si1p00T9P1gXoE4J92" crossorigin="anonymous"></script>
- 
-  <script>
-    $(document).ready(function () {
-        $('#searchIcon').click(function () {
-            $('#searchBar').toggle();
-            $('#searchQuery').focus(); // Focus on search input when shown
-        });
 
-        $('#searchQuery').on('input', function () {
-            var query = $(this).val();
-            var feedback = $('#feedbackMessage');
-            var noResultsMessage = $('#noResultsMessage');
 
-            // Basic validation
-            if (query.length === 0) {
-                feedback.text('Please enter a search term').show();
-                $('#resultsContainer').hide();
-                $('#noResultsMessage').hide();
-                $('#productList').show();
-            } else if (/^\d+$/.test(query)) { // Check if query is a number
-                feedback.text('Numbers are not allowed in search').show();
-                $('#resultsContainer').hide();
-                $('#noResultsMessage').hide();
-                $('#productList').show();
-            } else {
-                feedback.hide();
-                $.ajax({
-                    url: '/shop/search',
-                    type: 'GET',
-                    data: { q: query },
-                    success: function (data) {
-                        if (data.products.length === 0) {
-                            $('#resultsContainer').hide();
-                            $('#noResultsMessage').show();
-                            $('#productList').hide();
-                        } else {
-                            $('#noResultsMessage').hide();
-                            var html = '<div class="row m-2">';
-                            data.products.forEach(function (product) {
-                                html += '<div class="col-md-3 col-sm-3 col-6 product-item">';
-                                html += '<a href="/shop/details/' + product._id + '" style="text-decoration: none;">';
-                                html += '<img src="/product-images/' + product.images[0] + '" alt="" class="img-fluid">';
-                                html += '<p style="line-height: 28px; text-decoration: none; color: #72696e;">' + product.name + '<br>Rs.' + product.price + '</p><br><br>';
-                                html += '</a></div>';
-                            });
-                            html += '</div>';
-                            $('#resultsContainer').html(html).show();
-                            $('#productList').hide();
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('Error:', error);
-                    }
-                });
-            }
-        });
-          $('#openFilterPanelBtn').click(function () {
-                $('#filterPanel').toggle(); // Toggle the visibility of the filter panel
-            });
 
-            // Handle price range change
-            $('#priceRange').on('input', function () {
-                $('#priceRangeValue').text($(this).val());
-            });
-
-            // Handle checkbox changes
-            $('#filterPanel input').on('change', function () {
-                performSearch();
-            });
+// Function to handle sorting
+function applySort(sortValue) {
+    // Check if any category is selected
+    let categories = [];
+    document.querySelectorAll('input[name="categories"]:checked').forEach((checkbox) => {
+        categories.push(checkbox.value);
     });
-</script>
 
- 
-  <script>
-    document.getElementById('applyFiltersBtn').addEventListener('click', () => {
+    let newUrl = updateUrlParameter('sort', sortValue);
+    if (categories.length > 0) {
+        newUrl = updateUrlParameter('categories', categories.join(','));
+    }
+
+    window.location.href = newUrl; // Reloads the page with the new URL
+}
+
+// Function to handle search action
+function applySearch() {
+    let searchValue = document.getElementById('searchQuery').value.trim();
+    
+    if (searchValue) {
+        let newUrl = updateUrlParameter('q', searchValue);
+        window.location.href = newUrl; // Reloads the page with the new URL
+    } else {
+        document.getElementById('feedbackMessage').textContent = 'Please enter a search query.';
+    }
+}
+$(document).ready(function() {
+    // Toggle the search bar visibility when the search icon is clicked
+    $('#searchIcon').click(function() {
+        $('#searchBar').toggle(); // Toggle the visibility of the search bar
+    });
+
+    // You can also add logic here for closing the search bar when clicking outside of it
+    $(document).click(function(event) {
+        if (!$(event.target).closest('#searchBar, #searchIcon').length) {
+            $('#searchBar').hide(); // Hide the search bar if clicked outside
+        }
+    });
+});
+
+
+// Event listener for search button click
+document.getElementById('searchButton').addEventListener('click', applySearch);
+
+// Optional: Event listener for pressing 'Enter' in the search input field
+document.getElementById('searchQuery').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        applySearch(); // Trigger search when Enter key is pressed
+    }
+});
+
+
+
+document.getElementById('priceRange').addEventListener('input', function() {
+    let minPrice = this.value;
+    let maxPrice = this.getAttribute('max');
+    
+    document.getElementById('priceRangeValue').textContent = minPrice;
+    document.getElementById('priceRangeValueMax').textContent = maxPrice;
+});
+
+// Function to handle category filtering
+function applyCategoryFilter() {
     let categories = [];
     document.querySelectorAll('input[name="categories"]:checked').forEach((checkbox) => {
         categories.push(checkbox.value);
     });
 
     let minPrice = document.getElementById('priceRange').value;
-    let maxPrice = document.getElementById('priceRange').max;
-    let searchQuery=document.getElementById('searchQuery').value;
-    
+    let maxPrice = document.getElementById('priceRange').getAttribute('max');
 
-    // Construct the query string
-    let queryString = `?categories=${categories.join(',')}&minPrice=${minPrice}&maxPrice=${maxPrice}&q=${searchQuery}`;
-    if(searchQuery){
-        queryString+=`&q${searchQuery}`
+    // Update URL with all filters
+    let url = new URL(window.location.href);
+    url.searchParams.set('categories', categories.join(','));
+    url.searchParams.set('minPrice', minPrice);
+    url.searchParams.set('maxPrice', maxPrice);
+
+    window.location.href = url.toString(); 
+}
+
+// Function to update the URL with new query parameters and reload the page
+function updateUrlParameter(param, value) {
+    let url = new URL(window.location.href);
+    if (value) {
+        url.searchParams.set(param, value);
+    } else {
+        url.searchParams.delete(param); // Remove parameter if value is empty
     }
-    // Redirect to the filtered results
-    window.location.href = `/shop${queryString}`;
+    return url.toString();
+}
+
+// Event listeners
+document.getElementById('applyFiltersBtn').addEventListener('click', () => {
+    applyCategoryFilter();
+     // Apply category filters when the button is clicked
 });
-  </script>
-  
-  
+
+$('#openFilterPanelBtn').click(function () {
+    $('#filterPanel').toggle(); // Toggle the visibility of the filter panel
+});
+
+document.querySelectorAll('.sort-option').forEach(item => {
+    item.addEventListener('click', (event) => {
+        applySort(event.target.getAttribute('data-sort')); // Apply sorting when an option is selected
+    });
+});
+
+</script>
 
 </body>
 </html>
