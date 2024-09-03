@@ -73,6 +73,16 @@
         margin-left: 24px;
        
     }
+    .product-item {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px; /* Space between rows */
+}
+.container-fluid {
+    max-width: 100%;
+    padding: 0 15px; /* Adjust as needed */
+}
+
     
      
     </style>
@@ -184,20 +194,15 @@
 <div id="noResultsMessage" style="display: none; color: #72696e; margin-left: 15px;">
     No results found for your query.
 </div>
-
-<div class="row" id="productList">
-    {{#if products.length}}
+<div class="row">
     {{#each products}}
-    <div class="col-md-3 col-sm-3 col-6 product-item">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-6 product-item">
         <a href="/shop/details/{{this._id}}" style="text-decoration: none;">
             <img src="/product-images/{{this.images.[0]}}" alt="" class="img-fluid">
             <p style="line-height: 28px; text-decoration: none; color: #72696e;">{{this.name}}<br>Rs.{{this.discountprice}}</p>
         </a>
     </div>
     {{/each}}
-    {{else}}
-    <p>No products found matching your criteria.</p>
-    {{/if}}
 </div>
 
 <br><hr>
