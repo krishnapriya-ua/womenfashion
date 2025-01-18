@@ -10,7 +10,7 @@ const moment=require('moment')
 require('dotenv').config();
 require('./helpers/passport-setup')
 
-const connect = mongoose.connect(process.env.MONGO_URL);
+const connect = mongoose.connect(process.env.MONGO_URI+process.env.MONGO_DB_NAME);
 
 connect.then(() => {
     console.log('db connected');
