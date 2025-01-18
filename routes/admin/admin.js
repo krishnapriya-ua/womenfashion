@@ -204,13 +204,15 @@ async function getBestsellers(skip, limit) {
         { $limit: limit }
     ]);
 
+    console.log(bestsellingproduct,'CHHECK')
+
     const productIds = bestsellingproduct.map(p => p._id);
     const products = await Product.find({ _id: { $in: productIds } });
 
     return bestsellingproduct.map(p => {
         const product = products.find(prod => prod._id.equals(p._id));
         return {
-            ...product.toObject(),
+            ...product?.toObject(),
             totalQuantity: p.totalQuantity
         };
     });
