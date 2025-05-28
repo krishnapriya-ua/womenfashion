@@ -327,14 +327,14 @@ router.post('/add-to-cart/:id', auth, async (req, res) => {
         
         const product = await Product.findById(productId).sort({createdAt:-1})
         if (!product) {
-            return res.status(404).send({message:'Product not found'});
+            return res.status(404).json({message:'Product not found'});
         }
        if(product.stock===0){
         return res.status(400).json('currently product is not available')
        }
        const user=req.session.user;
-       if(!user){
-        return res.status(400).json('please login')
+       if(!userId){
+        return res.status(400).json({message:'please login'})
        }
 
         const availablequan=Math.min(maxquantity,product.stock)
@@ -356,7 +356,7 @@ router.post('/add-to-cart/:id', auth, async (req, res) => {
 
             }
             else{
-                return res.status(400).send({message:'Maximum quantity reached for this product'})
+                return res.status(400).json({message:'Maximum quantity reached for this product'})
             }
         } else {
             // If the product is not in the cart, add it
@@ -379,7 +379,7 @@ router.post('/add-to-cart/:id', auth, async (req, res) => {
         res.json({message:'Product added to  cart'}) // Redirect to the cart page or product details page
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error adding product to cart');
+        res.status(500).json({message:'Error adding product to cart'});
     }
 });
 

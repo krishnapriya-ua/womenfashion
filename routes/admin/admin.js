@@ -216,7 +216,7 @@ async function getBestsellers(skip, limit) {
             totalQuantity: p.totalQuantity
         };
     });
-}
+} 
 
 router.get('/adminpage/report', async (req, res) => {
     if (!req.session.admin) {

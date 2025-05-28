@@ -360,26 +360,11 @@ $(document).ready(function () {
             type: 'POST',
             url: `/add-to-cart/{{products._id}}`,
             success: function(response) {
-                iziToast.success({
-                            title: 'Success',
-                            message: response.message,
-                            position: 'topCenter',
-                            timeout: 3000,
-                            icon: 'icon-checkmark',
-                            color: 'green'
-                        });
-                        setTimeout(function() {
-                            window.location.href='/cart'
-                        }, 1700); // Redirect after toast disappears
-                    },
-                    error: function(xhr, status, error){
-                        iziToast.error({
-                            title: 'Error',
-                            message: xhr.responseText,
-                            position: 'center',
-                            timeout: 3000
-                        });
-                    }
+               window.location.href='/cart'
+            },
+            error: function(xhr, status, error){
+                alert(xhr.responseText)
+            }
         });
     });
 
