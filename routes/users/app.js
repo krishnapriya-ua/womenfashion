@@ -16,12 +16,14 @@ const PDFDocument=require('pdfkit')
 const fs=require('fs')
 const path=require('path');
 const { stream } = require('exceljs');
+require('dotenv').config()
+const mailpassword = process.env.MAIL_PASSWORD
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'krishnapriyaua@gmail.com',
-        pass: 'txej uvva mwtl nzsq'
+        pass:  mailpassword
     }
 });
 
